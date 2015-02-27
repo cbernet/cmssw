@@ -1,16 +1,28 @@
 # Copyright (C) 2014 Colin Bernet
 # https://github.com/cbernet/heppy/blob/master/LICENSE
 
-from ROOT import TFile
+from ROOT import TFile, TChain
 
 class Events(object):
     '''Event list from a tree in a root file.
     '''
     def __init__(self, filename, treename, options=None):
-        self.file = TFile(filename)
-        if self.file.IsZombie():
-            raise ValueError('file {fnam} does not exist'.format(fnam=filename))
-        self.tree = self.file.Get(treename)
+
+        #If provided with a list, use TChain
+        if not isinstance(filename, str) and isinstance(filename, list):
+            self.file = filename
+            self.tree = TChain(treename)
+            for fn in filename:
+                self.tree.AddFile(fn)
+        #If single file, use TFile.Open
+        elif isinstance(filename, str):
+            self.file = TFile.Open(filename)
+            if self.file.IsZombie():
+                raise ValueError('file {fnam} does not exist'.format(fnam=filename))
+            self.tree = self.file.Get(treename)
+        else:
+            raise ValueError("filename should be str or list of str but is {0}".format(filename))
+
         if self.tree == None: # is None would not work
             raise ValueError('tree {tree} does not exist in file {fnam}'.format(
                 tree = treename,
@@ -27,6 +39,13 @@ class Events(object):
 
     def __iter__(self):
         return iter(self.tree)
+
+    def __len__(self):
+        return self.size()
+
+    def __getitem__(self, i):
+        self.tree.GetEntry(i)
+        return self.tree
 
 if __name__ == '__main__':
 
