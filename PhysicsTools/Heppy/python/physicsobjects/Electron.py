@@ -1,5 +1,5 @@
 from PhysicsTools.Heppy.physicsobjects.Lepton import Lepton
-from PhysicsTools.Heppy.physicsutils.ElectronMVAID import ElectronMVAID_Trig, ElectronMVAID_NonTrig, ElectronMVAID_TrigNoIP
+from PhysicsTools.Heppy.physicsutils.ElectronMVAID import *
 import ROOT
 
 class Electron( Lepton ):
@@ -15,19 +15,13 @@ class Electron( Lepton ):
         self.tightIdResult = None
         self.associatedVertex = None
         self.rho              = None
-        self._mvaNonTrigV0  = {True:None, False:None}
-        self._mvaTrigV0     = {True:None, False:None}
-        self._mvaTrigNoIPV0 = {True:None, False:None}
+        self._mvaRun2 = {}
 
     def electronID( self, id, vertex=None, rho=None ):
         if id is None or id == "": return True
         if vertex == None and hasattr(self,'associatedVertex') and self.associatedVertex != None: vertex = self.associatedVertex
         if rho == None and hasattr(self,'rho') and self.rho != None: rho = self.rho
-        if   id == "POG_MVA_ID_NonTrig":  return self.mvaIDLoose()
-        elif id == "POG_MVA_ID_Trig":     return self.mvaIDTight()
-        elif id == "POG_MVA_ID_NonTrig_full5x5":  return self.mvaIDLoose(full5x5=True)
-        elif id == "POG_MVA_ID_Trig_full5x5":     return self.mvaIDTight(full5x5=True)
-        elif id.startswith("POG_Cuts_ID_"): 
+        if id.startswith("POG_Cuts_ID_"): 
                 return self.cutBasedId(id.replace("POG_Cuts_ID_","POG_")) 
         for ID in self.electronIDs():
             if ID.first == id:
@@ -80,57 +74,17 @@ class Electron( Lepton ):
         return self.absIsoFromEA(rho,self.superCluster().eta(),effectiveAreas.eGamma)
 
     def mvaId( self ):
-        return self.mvaNonTrigV0()
+        return self.mvaRun2("NonTrigPhys14")
         
     def tightId( self ):
         return self.tightIdResult
     
-    def mvaNonTrigV0( self, full5x5=False, debug = False ):
-        if self._mvaNonTrigV0[full5x5] == None:
-            if self.associatedVertex == None: raise RuntimeError, "You need to set electron.associatedVertex before calling any MVA"
-            if self.rho              == None: raise RuntimeError, "You need to set electron.rho before calling any MVA"
-            self._mvaNonTrigV0[full5x5] = ElectronMVAID_NonTrig(self.physObj, self.associatedVertex, self.rho, full5x5, debug)
-        return self._mvaNonTrigV0[full5x5] 
+    def mvaRun2( self, name, debug = False ):
+        if name not in self._mvaRun2: 
+            if name not in ElectronMVAID_ByName: raise RuntimeError, "Unknown electron run2 mva id %s (known ones are: %s)\n" % (name, ElectronMVAID_ByName.keys())
+            self._mvaRun2[name] = ElectronMVAID_ByName[name](self.physObj, debug)
+        return self._mvaRun2[name]
 
-    def mvaTrigV0( self, full5x5=False, debug = False ):
-        if self._mvaTrigV0[full5x5] == None:
-            if self.associatedVertex == None: raise RuntimeError, "You need to set electron.associatedVertex before calling any MVA"
-            if self.rho              == None: raise RuntimeError, "You need to set electron.rho before calling any MVA"
-            self._mvaTrigV0[full5x5] = ElectronMVAID_Trig(self.physObj, self.associatedVertex, self.rho, full5x5, debug)
-        return self._mvaTrigV0[full5x5] 
-
-    def mvaTrigNoIPV0( self, full5x5=False, debug = False ):
-        if self._mvaTrigNoIPV0[full5x5] == None:
-            if self.associatedVertex == None: raise RuntimeError, "You need to set electron.associatedVertex before calling any MVA"
-            if self.rho              == None: raise RuntimeError, "You need to set electron.rho before calling any MVA"
-            self._mvaTrigNoIPV0[full5x5] = ElectronMVAID_TrigNoIP(self.physObj, self.associatedVertex, self.rho, full5x5, debug)
-        return self._mvaTrigNoIPV0[full5x5] 
-
-
-    def mvaIDTight(self, full5x5=False):
-            eta = abs(self.superCluster().eta())
-            if self.pt() < 20:
-                if   (eta < 0.8)  : return self.mvaTrigV0(full5x5) > +0.00;
-                elif (eta < 1.479): return self.mvaTrigV0(full5x5) > +0.10;
-                else              : return self.mvaTrigV0(full5x5) > +0.62;
-            else:
-                if   (eta < 0.8)  : return self.mvaTrigV0(full5x5) > +0.94;
-                elif (eta < 1.479): return self.mvaTrigV0(full5x5) > +0.85;
-                else              : return self.mvaTrigV0(full5x5) > +0.92;
-
-    def mvaIDLoose(self, full5x5=False):
-            eta = abs(self.superCluster().eta())
-            if self.pt() < 10:
-                if   (eta < 0.8)  : return self.mvaNonTrigV0(full5x5) > +0.47;
-                elif (eta < 1.479): return self.mvaNonTrigV0(full5x5) > +0.004;
-                else              : return self.mvaNonTrigV0(full5x5) > +0.295;
-            else:
-                if   (eta < 0.8)  : return self.mvaNonTrigV0(full5x5) > -0.34;
-                elif (eta < 1.479): return self.mvaNonTrigV0(full5x5) > -0.65;
-                else              : return self.mvaNonTrigV0(full5x5) > +0.60;
-
-    def mvaIDZZ(self):
-        return self.mvaIDLoose() and (self.gsfTrack().trackerExpectedHitsInner().numberOfLostHits()<=1)
 
     def chargedHadronIsoR(self,R=0.4):
         if   R == 0.3: return self.physObj.pfIsolationVariables().sumChargedHadronPt 
@@ -155,14 +109,6 @@ class Electron( Lepton ):
         if   R == 0.3: return self.physObj.pfIsolationVariables().sumPUPt 
         elif R == 0.4: return self.physObj.puChargedHadronIso()
         raise RuntimeError, "Electron chargedHadronIso missing for R=%s" % R
-
-
-
-
-    def chargedAllIso(self):
-        '''This function is used in the isolation, see Lepton class.
-        Here, we replace the all charged isolation by the all charged isolation with cone veto'''
-        return self.chargedAllIsoWithConeVeto()
 
 
     def dxy(self, vertex=None):
