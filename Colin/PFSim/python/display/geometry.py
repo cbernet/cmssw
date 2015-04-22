@@ -84,7 +84,7 @@ class GDetector(object):
 if __name__ == '__main__':
 
     from ROOT import TCanvas, TH2F
-    from Colin.PFSim.fastsim.geometry import CMS
+    from Colin.PFSim.fastsim.detectors.CMS import CMS
     from Colin.PFSim.display.core import Display
 
     cms = CMS()

@@ -9,7 +9,7 @@ class Display(object):
     def __init__(self, views=None):
         ViewPane.nviews = 0
         if not views:
-            views = ['xy', 'yz', xz]
+            views = ['xy', 'yz', 'xz']
         self.views = dict()
         for view in views:
             if view in ['xy', 'yz', 'xz']:

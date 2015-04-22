@@ -188,7 +188,7 @@ class GTrajectories(list):
         
 if __name__ == '__main__':
     import math
-    from Colin.PFSim.fastsim.geometry import CMS
+    from Colin.PFSim.fastsim.detectors.CMS import CMS
     from Colin.PFSim.fastsim.simulator import Simulator
     from Colin.PFSim.fastsim.vectors import Point
     from Colin.PFSim.fastsim.toyevents import particles
