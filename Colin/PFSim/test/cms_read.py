@@ -14,7 +14,8 @@ selectedComponents  = [inputSample]
 from Colin.PFSim.analyzers.CMSReader import CMSReader
 reader = cfg.Analyzer(
     CMSReader,
-    gen_particles = 'genParticles'
+    gen_particles = 'genParticles',
+    pf_particles = 'particleFlow'
 )
 
 from Colin.PFSim.analyzers.PFSim import PFSim
@@ -37,6 +38,13 @@ genjets = cfg.Analyzer(
     particles = 'gen_particles_stable'
 )
 
+pfjets = cfg.Analyzer(
+    JetClusterizer,
+    instance_label = 'pf',
+    particles = 'pf_particles'
+)
+
+
 from Colin.PFSim.analyzers.JetAnalyzer import JetAnalyzer
 jetana = cfg.Analyzer(
     JetAnalyzer,
@@ -57,6 +65,7 @@ sequence = cfg.Sequence( [
     pfsim,
     jets,
     genjets,
+    pfjets,
     jetana,
     tree
     ] )
