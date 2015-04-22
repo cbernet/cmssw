@@ -24,12 +24,41 @@ pfsim = cfg.Analyzer(
     verbose = False
 )
 
+from Colin.PFSim.analyzers.JetClusterizer import JetClusterizer
+jets = cfg.Analyzer(
+    JetClusterizer,
+    instance_label = 'rec',
+    particles = 'particles'
+)
+
+genjets = cfg.Analyzer(
+    JetClusterizer,
+    instance_label = 'gen',
+    particles = 'gen_particles_stable'
+)
+
+from Colin.PFSim.analyzers.JetAnalyzer import JetAnalyzer
+jetana = cfg.Analyzer(
+    JetAnalyzer,
+)
+
+
+from Colin.PFSim.analyzers.JetTreeProducer import JetTreeProducer
+tree = cfg.Analyzer(
+    JetTreeProducer,
+    tree_name = 'events',
+    tree_title = 'jets'
+)
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
     reader, 
-    pfsim
+    pfsim,
+    jets,
+    genjets,
+    jetana,
+    tree
     ] )
 
 

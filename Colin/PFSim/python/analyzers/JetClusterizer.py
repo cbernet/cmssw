@@ -2,20 +2,15 @@ from PhysicsTools.HeppyCore.framework.analyzer import Analyzer
 from PhysicsTools.HeppyCore.framework.event import Event
 from Colin.PFSim.particles.tlv.jet import Jet
 
-from ROOT import gSystem
-#FIXME
-# gSystem.Load("libColinPFSim")
-# from ROOT import JetClusterizer as CCJetClusterizer
-class CCJetClusterizer(object):
-    pass
+from ROOT import heppy 
 
 import math
     
 class JetClusterizer(Analyzer):
 
-    def __init__(self, *args, **kwargs):
-        super(JetClusterizer, self).__init__(*args, **kwargs)
-        self.clusterizer = CCJetClusterizer()
+    def beginLoop(self, setup):
+        super(JetClusterizer, self).beginLoop(setup)
+        self.clusterizer = heppy.JetClusterizer()
       
     def process(self, event):
         particles = getattr(event, self.cfg_ana.particles)
@@ -31,3 +26,4 @@ class JetClusterizer(Analyzer):
             jets.append( jet )
             self.mainLogger.info( '\t{jet}'.format(jet=jet))
         setattr(event, '_'.join([self.instance_label,'jets']), jets)
+

@@ -1,0 +1,10 @@
+<use name="root"/>
+<use name="rootcore"/>
+<use name="rootinteractive"/>
+<use name="rootpy"/>
+<use name="fastjet"/>
+<use name="ktjet"/>
+<use name="boost"/>
+<export>
+  <lib name="1"/>
+</export>
