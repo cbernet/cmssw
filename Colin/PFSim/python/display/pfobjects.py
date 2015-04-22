@@ -198,7 +198,7 @@ if __name__ == '__main__':
     cms = CMS()
     simulator = Simulator(cms)
     
-    particles = list( particles(5, 1, 0.5, math.pi/5., 4*math.pi/5.,
+    particles = list( particles(5, 211, math.pi/5., 4*math.pi/5.,
                                 10., 10., Point(0.5,0.5,0)) )
     simulator.simulate(particles)
     

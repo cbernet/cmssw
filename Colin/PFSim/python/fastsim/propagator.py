@@ -53,7 +53,7 @@ class StraightLinePropagator(Propagator):
 class HelixPropagator(Propagator):
     
     def propagate_one(self, particle, cylinder, field, debug_info=None):
-        helix = Helix(field, particle.charge, particle.p4(),
+        helix = Helix(field, particle.q(), particle.p4(),
                       particle.vertex)
         particle.set_path(helix)
         is_looper = helix.extreme_point_xy.Mag() < cylinder.rad
