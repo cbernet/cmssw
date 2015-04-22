@@ -83,17 +83,17 @@ def monojet(pdgids, theta, phi, pstar, jetenergy, vertex=None):
     boosted_particles = []
     jetp4 = LorentzVector() 
     for ptc in particles:
-        bp4 = LorentzVector(ptc.p4)
+        bp4 = LorentzVector(ptc.p4())
         bp4.Boost(boostvec)
         jetp4 += bp4
         boosted_particles.append( Particle(bp4,
                                            ptc.vertex,
                                            ptc.q(),
-                                           ptc.pdgid) )
+                                           ptc.pdgid()) )
     # print jetp4.M(), jetp4.E()
     return boosted_particles
         
 if __name__ == '__main__':
 
-    for ptc in monojet([211, 22, 22], 1, 0.5, 50):
+    for ptc in monojet([211, 22, 22], 1., 0.5, 1., 50.):
         print ptc
