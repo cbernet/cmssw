@@ -9,9 +9,9 @@ class ECAL(DetectorElement):
     def __init__(self):
         volume = VolumeCylinder('ecal', 1.55, 2.25, 1.30, 2. )
         # mat = material.Material('ECAL', 8.9e-3, 0.25)
-        mat = material.Material('ECAL', 8.9e-3, 1e-5)
+        mat = material.Material('ECAL', 8.9e-3, 0.25)
         self.eta_crack = 1.5
-        self.emin = 2.
+        self.emin = 0.25
         self.eres = [0.07, 0., 0.]
         super(ECAL, self).__init__('ecal', volume,  mat)
 
@@ -80,7 +80,7 @@ class Tracker(DetectorElement):
         # return False
         pt = track.pt
         eta = abs(track.p3.Eta())
-        if eta < 2.5 and pt>0.7:
+        if eta < 2.5 and pt>0.5:
             return random.uniform(0,1)<0.9 # 90% eff plateau in acceptance
         else:
             return False

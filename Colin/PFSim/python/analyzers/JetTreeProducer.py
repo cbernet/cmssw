@@ -14,21 +14,17 @@ class JetTreeProducer(Analyzer):
         self.tree = Tree( self.cfg_ana.tree_name,
                           self.cfg_ana.tree_title )
         bookJet(self.tree, 'jet1')
-        bookJet(self.tree, 'jet1_gen')
-        bookJet(self.tree, 'jet2')
-        bookJet(self.tree, 'jet2_gen')
+        bookJet(self.tree, 'jet1_pfsim')
+        bookJet(self.tree, 'jet1_reco')
         
     def process(self, event):
-        if( len(event.rec_jets)>0 ):
-            jet = event.rec_jets[0]
+        if( len(event.gen_jets)>0 ):
+            jet = event.gen_jets[0]
             fillJet(self.tree, 'jet1', jet)
-            if jet.gen:
-                fillJet(self.tree, 'jet1_gen', jet.gen)
-        if( len(event.rec_jets)>1 ):
-            jet = event.rec_jets[1]
-            fillJet(self.tree, 'jet2', jet)
-            if jet.gen:
-                fillJet(self.tree, 'jet2_gen', jet.gen)
+            if jet.pfsim:
+                fillJet(self.tree, 'jet1_pfsim', jet.pfsim)
+            if jet.reco:
+                fillJet(self.tree, 'jet1_reco', jet.reco)
         self.tree.tree.Fill()
         
         

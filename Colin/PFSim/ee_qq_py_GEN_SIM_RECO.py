@@ -27,6 +27,8 @@ process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(1000)
 )
 
+comEnergy = 200.
+
 # Input source
 process.source = cms.Source("EmptySource")
 
@@ -54,7 +56,7 @@ process.AODSIMoutput = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(15728640),
-    fileName = cms.untracked.string('ee_qq_py_GEN_SIM_RECO.root'),
+    fileName = cms.untracked.string('ee_qq_{come:.0f}_GEN_SIM_RECO.root'.format(come=comEnergy) ),
     outputCommands = process.AODSIMEventContent.outputCommands
 )
 
@@ -72,7 +74,7 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
         processParameters = cms.vstring('Beams:eCM = 91.', 
             'WeakSingleBoson:all = on', 
             'WeakZ0:gmZmode = 0', 
-            'PhaseSpace:pTHatMin = 20.', 
+            # 'PhaseSpace:pTHatMin = 20.', 
             '23:onMode = off', 
             '23:onIfMatch = 1 1'),
         pythia8CommonSettings = cms.vstring('Beams:idA = 11', 
@@ -89,7 +91,7 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
 					    )
     ),
     ElectronPositronInitialState = cms.bool(True),
-    comEnergy = cms.double(91.0),
+    comEnergy = cms.double(comEnergy),
     filterEfficiency = cms.untracked.double(1.0),
     maxEventsToPrint = cms.untracked.int32(0),
     pythiaHepMCVerbosity = cms.untracked.bool(False),
