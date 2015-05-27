@@ -6,7 +6,8 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 # and added to the list of selected components
 inputSample = cfg.Component(
     'some_aodsim',
-    files = ['ee_qq_py_GEN_SIM_RECO.root'],
+    # files = ['ee_qq_py_GEN_SIM_RECO.root'],
+    files = ['gun_22_0.0to50.0_ME0_GEN_SIM_RECO.root']
     # files = ['pp_qqbar_30_GEN_SIM_RECO.root'],
     )
 
