@@ -2,10 +2,10 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: Colin/PFSim/python/ee_qq.py --fast -s GEN,SIM,RECO --pileup=NoPileUp --eventcontent=AODSIM -n 10 --no_exec --conditions auto:run2_mc_FULL --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1
+# with command line options: TTbar_13TeV_TuneCUETP8M1_cfi --conditions auto:run2_mc --fast -n 10 --eventcontent RECOSIM --relval 100000,1000 -s GEN,SIM,RECOBEFMIX,DIGI:pdigi_valid,L1,L1Reco,RECO,HLT:@frozen25ns --datatier RECOSIM --beamspot NominalCollision2015 --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --magField 38T_PostLS1 --pileup=NoPileUp --no_exec
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process('RECO')
+process = cms.Process('HLT')
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -14,17 +14,22 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('FastSimulation.Configuration.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
 process.load('FastSimulation.Configuration.Geometries_MC_cff')
-process.load('Configuration.StandardSequences.MagneticField_38T_cff')
+process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
 process.load('Configuration.StandardSequences.Generator_cff')
 process.load('IOMC.EventVertexGenerators.VtxSmearedNominalCollision2015_cfi')
 process.load('GeneratorInterface.Core.genFilterSummary_cff')
-process.load('FastSimulation.Configuration.FamosSequences_cff')
-process.load('FastSimulation.Configuration.FamosSequences_cff')
+process.load('FastSimulation.Configuration.SimIdeal_cff')
+process.load('FastSimulation.Configuration.Reconstruction_BefMix_cff')
+process.load('FastSimulation.Configuration.Digi_cff')
+process.load('FastSimulation.Configuration.SimL1Emulator_cff')
+process.load('FastSimulation.Configuration.L1Reco_cff')
+process.load('FastSimulation.Configuration.Reconstruction_AftMix_cff')
+process.load('HLTrigger.Configuration.HLT_25ns14e33_v1_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(500)
 )
 
 material_effects = False
@@ -32,7 +37,7 @@ particle_id = 211
 particle_minE = 10.
 particle_maxE = 50.
 
-filename = 'gun_{pid}_{minE}to{maxE}_ME{mateff}_GEN_SIM_RECO.root'.format(
+filename = 'gun_{pid}_{minE}to{maxE}_ME{mateff}_RECOSIM.root'.format(
 	pid = particle_id,
 	minE = particle_minE, 
 	maxE = particle_maxE, 
@@ -56,27 +61,27 @@ process.configurationMetadata = cms.untracked.PSet(
 
 # Output definition
 
-process.AODSIMoutput = cms.OutputModule("PoolOutputModule",
+process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
     SelectEvents = cms.untracked.PSet(
         SelectEvents = cms.vstring('generation_step')
     ),
-    compressionAlgorithm = cms.untracked.string('LZMA'),
-    compressionLevel = cms.untracked.int32(4),
     dataset = cms.untracked.PSet(
-        dataTier = cms.untracked.string(''),
+        dataTier = cms.untracked.string('RECOSIM'),
         filterName = cms.untracked.string('')
     ),
-    eventAutoFlushCompressedSize = cms.untracked.int32(15728640),
+    eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
     fileName = cms.untracked.string(filename),
-    outputCommands = process.AODSIMEventContent.outputCommands
+    outputCommands = process.RECOSIMEventContent.outputCommands,
+    splitLevel = cms.untracked.int32(0)
 )
 
 # Additional output definition
 
 # Other statements
 process.genstepfilter.triggerConditions=cms.vstring("generation_step")
+process.mix.digitizers = cms.PSet(process.theDigitizersValid)
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc_FULL', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
 
 process.generator = cms.EDProducer("FlatRandomEGunProducer",
     PGunParameters = cms.PSet(
@@ -96,19 +101,28 @@ process.generator = cms.EDProducer("FlatRandomEGunProducer",
     firstRun = cms.untracked.uint32(1)
 )
 
+
+process.ProductionFilterSequence = cms.Sequence(process.generator)
+
 # Path and EndPath definitions
 process.generation_step = cms.Path(process.pgen)
-process.simulation_step = cms.Path(process.simulationWithFamos)
-process.reconstruction_step = cms.Path(process.reconstructionWithFamos)
+process.simulation_step = cms.Path(process.psim)
+process.reconstruction_befmix_step = cms.Path(process.reconstruction_befmix)
+process.digitisation_step = cms.Path(process.pdigi_valid)
+process.L1simulation_step = cms.Path(process.SimL1Emulator)
+process.L1Reco_step = cms.Path(process.L1Reco)
+process.reconstruction_step = cms.Path(process.reconstruction)
 process.genfiltersummary_step = cms.EndPath(process.genFilterSummary)
 process.endjob_step = cms.EndPath(process.endOfProcess)
-process.AODSIMoutput_step = cms.EndPath(process.AODSIMoutput)
+process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
 
 # Schedule definition
-process.schedule = cms.Schedule(process.generation_step,process.genfiltersummary_step,process.simulation_step,process.reconstruction_step,process.endjob_step,process.AODSIMoutput_step)
+process.schedule = cms.Schedule(process.generation_step,process.genfiltersummary_step,process.simulation_step,process.reconstruction_befmix_step,process.digitisation_step,process.L1simulation_step,process.L1Reco_step,process.reconstruction_step)
+process.schedule.extend(process.HLTSchedule)
+process.schedule.extend([process.endjob_step,process.RECOSIMoutput_step])
 # filter all path with the production filter sequence
 for path in process.paths:
-	getattr(process,path)._seq = process.generator * getattr(process,path)._seq 
+	getattr(process,path)._seq = process.ProductionFilterSequence * getattr(process,path)._seq 
 
 # customisation of the process.
 
@@ -123,6 +137,12 @@ from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1
 
 #call to customisation function customisePostLS1 imported from SLHCUpgradeSimulations.Configuration.postLS1Customs
 process = customisePostLS1(process)
+
+# Automatic addition of the customisation function from HLTrigger.Configuration.customizeHLTforMC
+from HLTrigger.Configuration.customizeHLTforMC import customizeHLTforFastSim 
+
+#call to customisation function customizeHLTforFastSim imported from HLTrigger.Configuration.customizeHLTforMC
+process = customizeHLTforFastSim(process)
 
 # End of customisation functions
 
