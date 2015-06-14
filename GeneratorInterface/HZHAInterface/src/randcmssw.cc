@@ -3,15 +3,31 @@
 // #include "CLHEP/Random/RandomEngine.h"
 // static CLHEP::HepRandomEngine* randomEngine;
 
+#include <cstdlib>
+#include <iostream>
+
+static bool seeded = false;
+
+// srand((unsigned)time(NULL));
+
+double rand_0_1() {
+  if(! seeded) {
+    srand(0xdeadbeef);
+    seeded = true;
+  }
+  double x=((double)rand()/(double)RAND_MAX);
+  return x;
+}
+
 extern "C"{
   double rndmcmssw_(double& dummy){
     //std::cout << "Using CMSSW random number generator" << std::endl;
     //return randomEngine->flat();
-    return 0.;
+    return rand_0_1();
   }
   double pyr_(double& dummy){
     //std::cout << "Using CMSSW random number generator" << std::endl;
     //return randomEngine->flat();
-    return 0;
+    return rand_0_1();
   }  
 }  
