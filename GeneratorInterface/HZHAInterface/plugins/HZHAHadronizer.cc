@@ -13,7 +13,7 @@
 #include "GeneratorInterface/Core/interface/BaseHadronizer.h"
 #include "GeneratorInterface/Core/interface/GeneratorFilter.h"
 #include "GeneratorInterface/Core/interface/HadronizerFilter.h"
-#include "GeneratorInterface/Core/interface/RNDMEngineAccess.h"
+// #include "GeneratorInterface/Core/interface/RNDMEngineAccess.h"
 #include "FWCore/ParameterSet/interface/FileInPath.h"
 #include "GeneratorInterface/Pythia6Interface/interface/Pythia6Service.h"
 #include "GeneratorInterface/Core/interface/FortranCallback.h"
