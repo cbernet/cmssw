@@ -7,7 +7,7 @@
 
 namespace heppy {
 
-JetClusterizer::JetClusterizer() {
+JetClusterizer::JetClusterizer(float min_e) : m_min_e(min_e) {
   std::cout<<"building jet clusterizer"<<std::endl;
   fastjet::JetAlgorithm algorithm = fastjet::JetAlgorithm::antikt_algorithm;
   fastjet::RecombinationScheme recomb_scheme = fastjet::RecombinationScheme::E_scheme;
@@ -26,7 +26,7 @@ void JetClusterizer::clusterize() {
   }
   // fastjet::JetDefinition   definition(m_algorithm, m_R, m_recomb_scheme); 
   fastjet::ClusterSequence sequence(inputs, m_definition);
-  std::vector<fastjet::PseudoJet> outputs = fastjet::sorted_by_E(sequence.inclusive_jets(1.));
+  std::vector<fastjet::PseudoJet> outputs = fastjet::sorted_by_E(sequence.inclusive_jets(m_min_e));
   m_outputs.clear();
   m_constituents.clear();
   // m_constituents.reserve(outputs.size());
