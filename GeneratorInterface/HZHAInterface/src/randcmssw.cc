@@ -5,6 +5,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <ctime>
 
 static bool seeded = false;
 
@@ -12,7 +13,8 @@ static bool seeded = false;
 
 double rand_0_1() {
   if(! seeded) {
-    srand(0xdeadbeef);
+    // srand(0xdeadbeef);
+    srand((unsigned)time(NULL));
     seeded = true;
   }
   double x=((double)rand()/(double)RAND_MAX);
