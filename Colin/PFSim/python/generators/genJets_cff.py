@@ -11,7 +11,7 @@ genParticlesForJetsNoNu.excludeFromResonancePids = cms.vuint32(12, 14, 16)
 #     )
 
 genJetsSequence = cms.Sequence(
-    genParticles +
+    genParticles 
     # genParticlesForJetsNoNu +
     # genJets
     )
