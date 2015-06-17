@@ -59,7 +59,7 @@ TIME 30.
 * ALL numbers MUST be REAL !                 
 *                                            
 *    IKLEI IPROC XRAD  ECM  EMPIR  SM  ICAR  
-GENE   5.    1.   1.   350.  4.0    1.   2.  
+GENE   1.    5.   1.   350.  4.0    1.   2.  
 *
 ***********************************************************************
 * Standard Model Parameters

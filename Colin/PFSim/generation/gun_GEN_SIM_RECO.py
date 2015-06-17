@@ -29,18 +29,20 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(500)
+    input = cms.untracked.int32(1000)
 )
 
 material_effects = False
 particle_id = 211
-particle_minE = 10.
-particle_maxE = 50.
+particle_minE = 0.
+particle_maxE = 20.
+particle_minEta = -3.
+particle_maxEta = +3.
 
 filename = 'gun_{pid}_{minE}to{maxE}_ME{mateff}_RECOSIM.root'.format(
 	pid = particle_id,
-	minE = particle_minE, 
-	maxE = particle_maxE, 
+	minE = int(particle_minE), 
+	maxE = int(particle_maxE), 
 	mateff = int(material_effects)
 )
 
@@ -83,16 +85,33 @@ process.mix.digitizers = cms.PSet(process.theDigitizersValid)
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
 
-process.generator = cms.EDProducer("FlatRandomEGunProducer",
+# process.generator = cms.EDProducer("FlatRandomEGunProducer",
+#     PGunParameters = cms.PSet(
+#         PartID = cms.vint32(particle_id),
+#         MinEta = cms.double(particle_minEta),
+#         MaxEta = cms.double(particle_maxEta),
+#         MaxPhi = cms.double(3.14159265359),
+#         MinE = cms.double(particle_minE),
+#         MinPhi = cms.double(-3.14159265359), ## in radians
+
+#         MaxE = cms.double(particle_maxE)
+#     ),
+#     Verbosity = cms.untracked.int32(0), ## set to 1 (or greater)  for printouts
+
+#     psethack = cms.string('single pi'),
+#     AddAntiParticle = cms.bool(False),
+#     firstRun = cms.untracked.uint32(1)
+# )
+
+process.generator = cms.EDProducer("FlatRandomPtGunProducer",
     PGunParameters = cms.PSet(
         PartID = cms.vint32(particle_id),
-        MaxEta = cms.double(1.0),
-        MaxPhi = cms.double(3.14159265359),
-        MinEta = cms.double(-1.0),
-        MinE = cms.double(particle_minE),
+        MinEta = cms.double(particle_minEta),
+        MaxEta = cms.double(particle_maxEta),
         MinPhi = cms.double(-3.14159265359), ## in radians
-
-        MaxE = cms.double(particle_maxE)
+        MaxPhi = cms.double(3.14159265359),
+        MinPt = cms.double(particle_minE),
+        MaxPt = cms.double(particle_maxE)
     ),
     Verbosity = cms.untracked.int32(0), ## set to 1 (or greater)  for printouts
 
@@ -100,7 +119,6 @@ process.generator = cms.EDProducer("FlatRandomEGunProducer",
     AddAntiParticle = cms.bool(False),
     firstRun = cms.untracked.uint32(1)
 )
-
 
 process.ProductionFilterSequence = cms.Sequence(process.generator)
 

@@ -8,7 +8,7 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(10)
 process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(2000)
 )
 
 process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
