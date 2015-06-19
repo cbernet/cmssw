@@ -29,12 +29,12 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000)
+    input = cms.untracked.int32(4000)
 )
 
 material_effects = False
 particle_id = 211
-particle_minE = 0.
+particle_minE = 10.
 particle_maxE = 20.
 particle_minEta = -3.
 particle_maxEta = +3.
