@@ -11,11 +11,23 @@ class PFMetAnalyzer( Analyzer ):
         self.handles['met'] =  AutoHandle(
             'pfMet', 'std::vector<reco::PFMET>'
             )
-        self.cleaned_pf_names = ['CleanedTrackerAndGlobalMuons']
+        self.cleaned_pf_names = [
+            'CleanedCosmicsMuons',
+            'CleanedFakeMuons',
+            'CleanedHF',
+            'CleanedPunchThroughMuons',
+            'CleanedPunchThroughNeutralHadrons',
+            'CleanedTrackerAndGlobalMuons',
+            'CleanedTrackerAndGlobalMuons',
+            'AddedMuonsAndHadrons', 
+            ]
         def init_cleaned_pf(label):
             self.handles[label] = AutoHandle(
                 ':'.join(['particleFlowTmp',label]), 'std::vector<reco::PFCandidate>'
                 )
+        self.handles['pf'] = AutoHandle(
+            'particleFlow', 'std::vector<reco::PFCandidate>'
+            )
         map(init_cleaned_pf, self.cleaned_pf_names)
         
 
@@ -26,6 +38,13 @@ class PFMetAnalyzer( Analyzer ):
     def process(self, event):
         self.readCollections( event.input )
         event.met = self.handles['met'].product()[0]
-        print event.met.pt(), event.met.phi(), event.met.sumEt()
-        event.CleanedTrackerAndGlobalMuons = self.handles['CleanedTrackerAndGlobalMuons'].product()
-        print len(event.CleanedTrackerAndGlobalMuons)
+        print 'PFMET', event.met.pt(), event.met.phi(), event.met.sumEt()
+        #         event.CleanedTrackerAndGlobalMuons = self.handles['CleanedTrackerAndGlobalMuons'].product()
+        #     print len(event.CleanedTrackerAndGlobalMuons)
+        for name in self.cleaned_pf_names:
+            coll = self.handles[name].product()
+            print name, len(coll)
+            setattr(event, name, coll)
+
+        event.pf = self.handles['pf'].product()
+        print 'pf', len(event.pf)
