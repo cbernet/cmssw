@@ -6,6 +6,19 @@ def var( tree, varName, type=float ):
 def fill( tree, varName, value ):
     tree.fill( varName, value )
 
+# event information
+
+def bookEvent(tree): 
+    var(tree, 'run')
+    var(tree, 'lumi')
+    var(tree, 'event')
+ 
+def fillEvent(tree, event):
+    fill(tree, 'run', event.run)
+    fill(tree, 'lumi', event.lumi)
+    fill(tree, 'event', event.eventId)
+
+
 # simple particle
 
 def bookParticle( tree, pName ):
