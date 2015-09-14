@@ -10,18 +10,29 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 #    files = ['doublemu_miniaod.root'],
 #    )
 
+debug = True
+
 from Colin.MetScanning.samples.miniaod import doublemu
 
 selectedComponents  = [doublemu]
 
-comp = selectedComponents[0]
-comp.files = comp.files[:200]
-comp.splitFactor = 10
+if debug:
+    print 'DEBUG MODE !!!'
+    comp = selectedComponents[0]
+    comp.files = comp.files[:200]
+    comp.splitFactor = 10
+
 
 from Colin.MetScanning.analyzers.MiniAODReader import MiniAODReader
 source = cfg.Analyzer(
     MiniAODReader,
     )
+
+from PhysicsTools.Heppy.analyzers.core.JSONAnalyzer import JSONAnalyzer
+json = cfg.Analyzer(
+    JSONAnalyzer
+)
+
 
 from Colin.MetScanning.analyzers.MetAnalyzer import MetAnalyzer
 met_ana = cfg.Analyzer(
@@ -39,7 +50,8 @@ met_tree = cfg.Analyzer(
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
-        source,
+        json,
+        source, 
         met_ana,
         met_tree
     ] )
