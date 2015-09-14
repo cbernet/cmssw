@@ -19,7 +19,8 @@ class MetTreeProducer(Analyzer):
     def process(self, event):
         self.tree.reset()
         fillEvent(self.tree, event)
-        fillMet(self.tree, 'pfmet', event.pfmet)
+        if hasattr(event, 'pfmet'):
+            fillMet(self.tree, 'pfmet', event.pfmet)
         fillMet(self.tree, 'pfmet_maod_uc', event.pfmet_maod_uncorr)
         self.tree.tree.Fill()
 

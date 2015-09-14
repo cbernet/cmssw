@@ -16,8 +16,9 @@ class MetAnalyzer( Analyzer ):
 
        
     def process(self, event):
-        pfcands = event.pfcands
-        event.pfmet = METBuilder(pfcands, 'pf_all')
+        if hasattr(event, 'pfcands'):
+            pfcands = event.pfcands
+            event.pfmet = METBuilder(pfcands, 'pf_all')
         event.pfmet_maod_uncorr = METSimple(event.maod_met.uncorrectedPt(), 
                                             event.maod_met.uncorrectedPhi(), 
                                             event.maod_met.uncorrectedSumEt(), 
