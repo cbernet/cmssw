@@ -12,15 +12,15 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 
 debug = True
 
-from Colin.MetScanning.samples.miniaod import doublemu
+from Colin.MetScanning.samples.miniaod import doublemu_json as doublemu
 
 selectedComponents  = [doublemu]
 
 if debug:
     print 'DEBUG MODE !!!'
     comp = selectedComponents[0]
-    comp.files = comp.files[:200]
-    comp.splitFactor = 10
+    comp.files = comp.files[:1]
+    comp.splitFactor = 1
 
 
 from Colin.MetScanning.analyzers.MiniAODReader import MiniAODReader

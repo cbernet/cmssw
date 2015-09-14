@@ -10,9 +10,10 @@ class MiniAODReader( Analyzer ):
 
     def declareHandles(self):
         super(MiniAODReader, self).declareHandles()
-        self.handles['pfcands'] =  AutoHandle(
-            'packedPFCandidates', 'std::vector<pat::PackedCandidate>'
-            )
+        if self.cfg_ana.read_pfcands: 
+            self.handles['pfcands'] =  AutoHandle(
+                'packedPFCandidates', 'std::vector<pat::PackedCandidate>'
+                )
         self.handles['mets'] =  AutoHandle(
             'slimmedMETs', 'std::vector<pat::MET>'
             )
@@ -25,7 +26,8 @@ class MiniAODReader( Analyzer ):
        
     def process(self, event):
         self.readCollections( event.input )
-        event.pfcands = map(PFCandidate, self.handles['pfcands'].product())
+        if self.cfg_ana.read_pfcands: 
+            event.pfcands = map(PFCandidate, self.handles['pfcands'].product())
         met = self.handles['mets'].product()[0]
         event.maod_met = met 
 
