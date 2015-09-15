@@ -29,8 +29,6 @@ class MetTreeProducer(Analyzer):
             for pdgid, met in event.pfmets.iteritems():
                 fillMet(self.tree, 'pfmet_{pdgid}'.format(pdgid=pdgid), met)
         fillMet(self.tree, 'pfmet_maod_uc', event.pfmet_maod_uncorr)
-        if event.pfmet_maod_uncorr.pt() < 0.1:
-            raise UserWarning
         self.tree.tree.Fill()
 
 
