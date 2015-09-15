@@ -16,16 +16,20 @@ from Colin.MetScanning.samples.miniaod import doublemu_json as doublemu
 
 selectedComponents  = [doublemu]
 
+comp = selectedComponents[0]
+comp.splitFactor = 10
+
 if debug:
     print 'DEBUG MODE !!!'
-    comp = selectedComponents[0]
     comp.files = comp.files[:1]
     comp.splitFactor = 1
+
 
 
 from Colin.MetScanning.analyzers.MiniAODReader import MiniAODReader
 source = cfg.Analyzer(
     MiniAODReader,
+    read_pfcands = True
     )
 
 from PhysicsTools.Heppy.analyzers.core.JSONAnalyzer import JSONAnalyzer
