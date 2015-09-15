@@ -27,16 +27,15 @@ process.source = cms.Source(
     )
 
 process.lowMet = cms.EDFilter(
-    "CandViewSelector",
+    "PatMETSelector",
     src = cms.InputTag("slimmedMETs"),
-    cut = cms.string("pt() < 50")
+    cut = cms.string("uncorrectedPt() < 5")
     )
 
 process.lowMetFilter = cms.EDFilter("CandViewCountFilter",
     src = cms.InputTag("lowMet"),
     minNumber = cms.uint32(1),
   )
-
 
 process.p = cms.Path(
     process.lowMet + 
