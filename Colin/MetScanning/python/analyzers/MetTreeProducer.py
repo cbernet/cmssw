@@ -3,6 +3,8 @@ from PhysicsTools.HeppyCore.statistics.tree import Tree
 from ntuple import *
 from ROOT import TFile
 
+from MetAnalyzer import pdgids 
+
 class MetTreeProducer(Analyzer):
 
     def beginLoop(self, setup):
@@ -13,6 +15,8 @@ class MetTreeProducer(Analyzer):
         self.tree = Tree( self.cfg_ana.tree_name,
                           self.cfg_ana.tree_title )
         bookMet(self.tree, 'pfmet')
+        for pdgid in pdgids: 
+            bookMet(self.tree, 'pfmet_{pdgid}'.format(pdgid=pdgid))
         bookMet(self.tree, 'pfmet_maod_uc')
         bookEvent(self.tree)
 
@@ -21,7 +25,12 @@ class MetTreeProducer(Analyzer):
         fillEvent(self.tree, event)
         if hasattr(event, 'pfmet'):
             fillMet(self.tree, 'pfmet', event.pfmet)
+        if hasattr(event, 'pfmets'):
+            for pdgid, met in event.pfmets.iteritems():
+                fillMet(self.tree, 'pfmet_{pdgid}'.format(pdgid=pdgid), met)
         fillMet(self.tree, 'pfmet_maod_uc', event.pfmet_maod_uncorr)
+        if event.pfmet_maod_uncorr.pt() < 0.1:
+            raise UserWarning
         self.tree.tree.Fill()
 
 
