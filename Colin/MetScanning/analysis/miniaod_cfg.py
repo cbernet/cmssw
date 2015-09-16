@@ -10,9 +10,9 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 #    files = ['doublemu_miniaod.root'],
 #    )
 
-debug = True
+debug = False
 
-from Colin.MetScanning.samples.miniaod import doublemu_json as doublemu
+from Colin.MetScanning.samples.miniaod import doublemu_lowmet as doublemu
 
 selectedComponents  = [doublemu]
 
@@ -24,8 +24,6 @@ if debug:
     comp.files = comp.files[:1]
     comp.splitFactor = 1
 
-
-
 from Colin.MetScanning.analyzers.MiniAODReader import MiniAODReader
 source = cfg.Analyzer(
     MiniAODReader,
@@ -36,7 +34,6 @@ from PhysicsTools.Heppy.analyzers.core.JSONAnalyzer import JSONAnalyzer
 json = cfg.Analyzer(
     JSONAnalyzer
 )
-
 
 from Colin.MetScanning.analyzers.MetAnalyzer import MetAnalyzer
 met_ana = cfg.Analyzer(
