@@ -1,0 +1,8 @@
+<export>
+</export>
+<library   name="ColinMetScanning_plugins" file="*.cc">
+  <use   name="FWCore/Framework"/>
+  <use   name="FWCore/ParameterSet"/>
+  <use   name="DataFormats/PatCandidates"/>
+  <use   name="CommonTools/UtilAlgos"/>
+</library>
