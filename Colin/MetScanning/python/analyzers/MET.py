@@ -1,7 +1,6 @@
 import copy
 
 class BaseMET(object):
-    
 
     def pt(self):
         return self._pt
