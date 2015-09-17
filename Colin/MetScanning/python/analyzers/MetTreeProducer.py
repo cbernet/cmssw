@@ -28,7 +28,8 @@ class MetTreeProducer(Analyzer):
         if hasattr(event, 'pfmets'):
             for pdgid, met in event.pfmets.iteritems():
                 fillMet(self.tree, 'pfmet_{pdgid}'.format(pdgid=pdgid), met)
-        fillMet(self.tree, 'pfmet_maod_uc', event.pfmet_maod_uncorr)
+        if hasattr(event, 'pfmet_maod_uc'):
+            fillMet(self.tree, 'pfmet_maod_uc', event.pfmet_maod_uncorr)
         self.tree.tree.Fill()
 
 
