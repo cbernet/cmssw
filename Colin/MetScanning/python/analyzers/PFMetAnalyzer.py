@@ -9,7 +9,7 @@ class PFMetAnalyzer( Analyzer ):
 
     def declareHandles(self):
         super(PFMetAnalyzer, self).declareHandles()
-        self.handles['met'] =  AutoHandle(
+        self.handles['pfmet'] =  AutoHandle(
             'pfMet', 'std::vector<reco::PFMET>'
             )
         self.cleaned_pf_names = [
@@ -38,17 +38,18 @@ class PFMetAnalyzer( Analyzer ):
        
     def process(self, event):
         self.readCollections( event.input )
-        event.met = self.handles['met'].product()[0]
+        event.pfmet = self.handles['pfmet'].product()[0]
         # print 'PFMET', event.met.pt(), event.met.phi(), event.met.sumEt()
         #         event.CleanedTrackerAndGlobalMuons = self.handles['CleanedTrackerAndGlobalMuons'].product()
         #     print len(event.CleanedTrackerAndGlobalMuons)
-        for name in self.cleaned_pf_names:
-            coll = map(PFCandidate, self.handles[name].product())
-            # print name, len(coll)
-            setattr(event, name, coll)
+        # for name in self.cleaned_pf_names:
+        #    coll = map(PFCandidate, self.handles[name].product())
+        #    # print name, len(coll)
+        #    setattr(event, name, coll)
 
-        event.pf = map(PFCandidate, self.handles['pf'].product())
+        # event.pfcands = map(PFCandidate, self.handles['pf'].product())
         # print 'pf', len(event.pf)
-        event.rec_pfmet = METBuilder(event.pf, 'particleFlow')
+        # event.rec_pfmet = METBuilder(event.pf, 'particleFlow')
         # print event.rec_pfmet
-        print 'diff', event.rec_pfmet.pt() - event.met.pt()
+        # print 'diff', event.rec_pfmet.pt() - event.met.pt()
+        # print event.pfmet.pt(), event.pfmet.phi()
