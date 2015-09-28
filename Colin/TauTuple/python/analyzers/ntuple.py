@@ -50,7 +50,9 @@ def fillMet(tree, pName, met):
     fill(tree, '{pName}_sumet'.format(pName=pName), met.sumEt())
 
 def bookTau(tree, pName, tau):
-    bookParticle(tree, pName)
+    bookParticle(tree, pName)   
+    bookParticle(tree, '{pName}_gen'.format(pName=pName))
+    bookParticle(tree, '{pName}_pfjet'.format(pName=pName))
     var(tree, '{pName}_nsigcharged'.format(pName=pName))
     for discName in tau.discs:
         var(tree, '{pName}_{disc}'.format(pName=pName,
@@ -58,6 +60,10 @@ def bookTau(tree, pName, tau):
         
 def fillTau(tree, pName, tau):
     fillParticle(tree, pName, tau)
+    if tau.match_gen:
+        fillParticle(tree, '{pName}_gen'.format(pName=pName), tau.match_gen)
+    if hasattr(tau, 'match_pfjet') and tau.match_pfjet:
+        fillParticle(tree, '{pName}_pfjet'.format(pName=pName), tau.match_pfjet)
     fill(tree, '{pName}_nsigcharged'.format(pName=pName), len(tau.signalCharged()))
     for discName, value in tau.discs.iteritems():
         fill(tree, '{pName}_{disc}'.format(pName=pName,
