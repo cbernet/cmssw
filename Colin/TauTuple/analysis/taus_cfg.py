@@ -37,24 +37,53 @@ pftaus = cfg.Analyzer(
         'hpsPFTauMVA3IsolationNeutralIsoPtSum',
         'hpsPFTauMVA3IsolationPUcorrPtSum'
         ],
-    select_kin = lambda tau: tau.pt()>30. , 
+    select_kin = lambda tau: tau.pt()>10. , 
+    verbose = False
+    )
+
+calotaus = cfg.Analyzer(
+    TauAnalyzer,
+    'calo',
+    taus = 'caloRecoTauProducer',
+    discs = [ 
+        'caloRecoTauDiscriminationByLeadingTrackFinding',
+        'caloRecoTauDiscriminationByLeadingTrackPtCut',
+        'caloRecoTauDiscriminationByTrackIsolation',
+        'caloRecoTauDiscriminationByIsolation',
+        'caloRecoTauDiscriminationByECALIsolation',
+        'caloRecoTauDiscriminationAgainstMuon',
+        'caloRecoTauDiscriminationAgainstElectron'
+        ],
+    select_kin = lambda tau: tau.pt()>10. , 
     verbose = False
     )
 
 from Colin.TauTuple.analyzers.TauTreeProducer import TauTreeProducer
 pftaus_tree = cfg.Analyzer(
     TauTreeProducer,
+    'pf',
     tree_name = 'tau_tree',
     tree_title = 'tau ntuple',
     taus = 'taus_pf',
 )
+
+calotaus_tree = cfg.Analyzer(
+    TauTreeProducer,
+    'calo',
+    tree_name = 'tau_tree',
+    tree_title = 'tau ntuple',
+    taus = 'taus_calo',
+)
+
 
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
         pftaus,
-        pftaus_tree
+        pftaus_tree,
+        calotaus,
+        calotaus_tree
     ] )
 
 # finalization of the configuration object. 
