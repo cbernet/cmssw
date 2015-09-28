@@ -26,15 +26,17 @@ class TauAnalyzer( Analyzer ):
         all_discs = dict()
         for discname in self.cfg_ana.discs:
             all_discs[discname] = self.handles[discname].product()
+        taus = []
         for itau, htau in  enumerate(self.handles['taus'].product()):
             tau = Tau(htau)
+            taus.append(tau)
             if not self.cfg_ana.select_kin(tau): 
                 continue
             tau.discs = dict()
             for discname, disc in all_discs.iteritems():
                 value = disc[itau].second
                 tau.discs[discname] = value
-
+        setattr(event, 'taus_{label}'.format(label=self.instance_label), taus)
 
 #             print tau.pt(), tau.discs['hpsPFTauDiscriminationByDecayModeFinding'], tau.discs['hpsPFTauDiscriminationByMediumIsolation']
         
