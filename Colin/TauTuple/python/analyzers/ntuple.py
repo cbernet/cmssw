@@ -27,7 +27,8 @@ def bookParticle( tree, pName ):
     var(tree, '{pName}_pt'.format(pName=pName))
     var(tree, '{pName}_eta'.format(pName=pName))
     var(tree, '{pName}_phi'.format(pName=pName))
-    var(tree, '{pName}_m'.format(pName=pName))
+    var(tree, '{pName}_m'.format(pName=pName))  
+    var(tree, '{pName}_q'.format(pName=pName))
 
 def fillParticle( tree, pName, particle ):
     fill(tree, '{pName}_pdgid'.format(pName=pName), particle.pdgId() )
@@ -36,6 +37,7 @@ def fillParticle( tree, pName, particle ):
     fill(tree, '{pName}_eta'.format(pName=pName), particle.eta() )
     fill(tree, '{pName}_phi'.format(pName=pName), particle.phi() )
     fill(tree, '{pName}_m'.format(pName=pName), particle.mass() )
+    fill(tree, '{pName}_q'.format(pName=pName), particle.charge() )
 
 def bookMet(tree, pName):
     var(tree, '{pName}_pt'.format(pName=pName))
@@ -49,12 +51,14 @@ def fillMet(tree, pName, met):
 
 def bookTau(tree, pName, tau):
     bookParticle(tree, pName)
+    var(tree, '{pName}_nsigcharged'.format(pName=pName))
     for discName in tau.discs:
         var(tree, '{pName}_{disc}'.format(pName=pName,
                                           disc=discName))
         
 def fillTau(tree, pName, tau):
     fillParticle(tree, pName, tau)
+    fill(tree, '{pName}_nsigcharged'.format(pName=pName), len(tau.signalCharged()))
     for discName, value in tau.discs.iteritems():
         fill(tree, '{pName}_{disc}'.format(pName=pName,
                                            disc=discName), value)
