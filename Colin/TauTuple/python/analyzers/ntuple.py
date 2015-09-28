@@ -25,19 +25,17 @@ def bookParticle( tree, pName ):
     var(tree, '{pName}_pdgid'.format(pName=pName))
     var(tree, '{pName}_e'.format(pName=pName))
     var(tree, '{pName}_pt'.format(pName=pName))
-    var(tree, '{pName}_theta'.format(pName=pName))
     var(tree, '{pName}_eta'.format(pName=pName))
     var(tree, '{pName}_phi'.format(pName=pName))
     var(tree, '{pName}_m'.format(pName=pName))
 
 def fillParticle( tree, pName, particle ):
-    fill(tree, '{pName}_pdgid'.format(pName=pName), particle.pdgid() )
-    fill(tree, '{pName}_e'.format(pName=pName), particle.e() )
+    fill(tree, '{pName}_pdgid'.format(pName=pName), particle.pdgId() )
+    fill(tree, '{pName}_e'.format(pName=pName), particle.energy() )
     fill(tree, '{pName}_pt'.format(pName=pName), particle.pt() )
-    fill(tree, '{pName}_theta'.format(pName=pName), particle.theta() )
     fill(tree, '{pName}_eta'.format(pName=pName), particle.eta() )
     fill(tree, '{pName}_phi'.format(pName=pName), particle.phi() )
-    fill(tree, '{pName}_m'.format(pName=pName), particle.m() )
+    fill(tree, '{pName}_m'.format(pName=pName), particle.mass() )
 
 def bookMet(tree, pName):
     var(tree, '{pName}_pt'.format(pName=pName))
@@ -48,3 +46,16 @@ def fillMet(tree, pName, met):
     fill(tree, '{pName}_pt'.format(pName=pName), met.pt())
     fill(tree, '{pName}_phi'.format(pName=pName), met.phi())
     fill(tree, '{pName}_sumet'.format(pName=pName), met.sumEt())
+
+def bookTau(tree, pName, tau):
+    bookParticle(tree, pName)
+    for discName in tau.discs:
+        var(tree, '{pName}_{disc}'.format(pName=pName,
+                                          disc=discName))
+        
+def fillTau(tree, pName, tau):
+    fillParticle(tree, pName, tau)
+    for discName, value in tau.discs.iteritems():
+        fill(tree, '{pName}_{disc}'.format(pName=pName,
+                                           disc=discName), value)
+
