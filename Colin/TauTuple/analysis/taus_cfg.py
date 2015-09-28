@@ -29,7 +29,11 @@ from Colin.TauTuple.analyzers.TauAnalyzer import TauAnalyzer
 pftaus = cfg.Analyzer(
     TauAnalyzer,
     taus = 'hpsPFTauProducer',
-    discs = 'hpsPFTauDiscriminationByDecayModeFinding', 
+    discs = [ 
+        'hpsPFTauDiscriminationByDecayModeFinding',
+        'hpsPFTauDiscriminationByMediumIsolation'
+        ],
+    select_kin = lambda tau: tau.pt()>30.
     )
 
 
