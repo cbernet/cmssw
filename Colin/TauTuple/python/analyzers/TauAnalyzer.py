@@ -5,6 +5,16 @@ from PhysicsTools.Heppy.physicsobjects.PhysicsObject import PhysicsObject
 
 class Tau(PhysicsObject):
 
+    def __init__(self, physobj):
+        super(Tau, self).__init__(physobj)
+
+    def signalCharged(self):
+        if not hasattr(self, 'leadPFCand'):
+            return self.signalTracks()
+        else:
+            return self.signalPFChargedHadrCands()
+
+
     def discstr(self, tab):
         strs = []
         for dname, value in self.discs.iteritems():
@@ -12,6 +22,7 @@ class Tau(PhysicsObject):
                                                             dname=dname,
                                                             value=value) )
         return '\n'.join(sorted(strs)) 
+
 
 
 class TauAnalyzer( Analyzer ):
@@ -66,6 +77,7 @@ class TauAnalyzer( Analyzer ):
                 print tau
                 print tau.discstr('\t')
             taus.append(tau)
+#            print len(tau.signalCharged())
         setattr(event, 'taus_{label}'.format(label=self.instance_label), taus)
 #        if len(taus):
 #            import pdb; pdb.set_trace()
