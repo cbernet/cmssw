@@ -25,6 +25,21 @@ if debug:
     comp.files = comp.files[:1]
     comp.splitFactor = 1
 
+from Colin.TauTuple.analyzers.JetReader import JetReader
+taugenjets = cfg.Analyzer(
+    JetReader, 
+    'tau_gen_jets',
+    jets = ('tauGenJets', 'std::vector<reco::GenJet>'),
+    jet_pt = 10,
+)
+
+pfjets = cfg.Analyzer(
+    JetReader, 
+    'pfjets',
+    jets = ('ak4PFJets', 'std::vector<reco::PFJet>'),
+    jet_pt = 10,
+)
+
 from Colin.TauTuple.analyzers.TauAnalyzer import TauAnalyzer
 pftaus = cfg.Analyzer(
     TauAnalyzer,
@@ -75,15 +90,45 @@ calotaus_tree = cfg.Analyzer(
     taus = 'taus_calo',
 )
 
+from Colin.TauTuple.analyzers.Matcher import Matcher                                   
+calotaus_match_gen = cfg.Analyzer(                                                                     
+    Matcher, 
+    instance_label = 'calo_gen',
+    match_label = 'gen',                                                                         
+    match_particles = 'tau_gen_jets',                                                                  
+    particles = 'taus_calo'                                                                          
+    ) 
+
+pftaus_match_gen = cfg.Analyzer(                                                                     
+    Matcher,                  
+    instance_label = 'pf_gen',
+    match_label = 'gen',                                                                         
+    match_particles = 'tau_gen_jets',                                                                  
+    particles = 'taus_pf'                                                                          
+    ) 
+
+pftaus_match_pf = cfg.Analyzer(                                                                     
+    Matcher,                    
+    instance_label = 'pf_pf',
+    match_label = 'pfjet',                                                                         
+    match_particles = 'pfjets',                                                                  
+    particles = 'taus_pf'                                                                          
+    ) 
+
 
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
+        taugenjets, 
         pftaus,
+        pfjets,
+        pftaus_match_gen, 
+        pftaus_match_pf,
         pftaus_tree,
-#        calotaus,
-#        calotaus_tree
+        calotaus,
+        calotaus_match_gen,
+        calotaus_tree
     ] )
 
 # finalization of the configuration object. 

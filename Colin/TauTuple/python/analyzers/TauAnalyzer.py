@@ -9,6 +9,8 @@ class Tau(PhysicsObject):
         super(Tau, self).__init__(physobj)
 
     def signalCharged(self):
+        '''number of charged tracks in the calo tau signal cone, or of charged 
+        PFCandidates in the PFTau'''
         if not hasattr(self, 'leadPFCand'):
             return self.signalTracks()
         else:
@@ -82,7 +84,7 @@ class TauAnalyzer( Analyzer ):
 #        if len(taus):
 #            import pdb; pdb.set_trace()
             
-#             print tau.pt(), tau.discs['hpsPFTauDiscriminationByDecayModeFinding'], tau.discs['hpsPFTauDiscriminationByMediumIsolation']
+#        print tau.pt(), tau.discs['hpsPFTauDiscriminationByDecayModeFinding'], tau.discs['hpsPFTauDiscriminationByMediumIsolation']
         
 
 
