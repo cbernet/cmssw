@@ -15,9 +15,9 @@ class TauTreeProducer(Analyzer):
         self.booked = False
 
     def process(self, event):
-        self.tree.reset()
         taus = getattr(event, self.cfg_ana.taus)
         for tau in taus:
+            self.tree.reset()
             if not self.booked:
                 bookTau(self.tree, self.cfg_ana.taus, tau)
                 self.booked = True
