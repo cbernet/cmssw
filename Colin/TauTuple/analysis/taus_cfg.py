@@ -82,8 +82,8 @@ calotaus_tree = cfg.Analyzer(
 sequence = cfg.Sequence( [
         pftaus,
         pftaus_tree,
-        calotaus,
-        calotaus_tree
+#        calotaus,
+#        calotaus_tree
     ] )
 
 # finalization of the configuration object. 
