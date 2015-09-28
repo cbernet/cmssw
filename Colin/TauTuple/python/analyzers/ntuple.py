@@ -62,6 +62,8 @@ def fillTau(tree, pName, tau):
     fillParticle(tree, pName, tau)
     if tau.match_gen:
         fillParticle(tree, '{pName}_gen'.format(pName=pName), tau.match_gen)
+        # if tau.pt()/tau.match_gen.pt()<0.2:
+        #    import pdb; pdb.set_trace()
     if hasattr(tau, 'match_pfjet') and tau.match_pfjet:
         fillParticle(tree, '{pName}_pfjet'.format(pName=pName), tau.match_pfjet)
     fill(tree, '{pName}_nsigcharged'.format(pName=pName), len(tau.signalCharged()))
