@@ -12,10 +12,10 @@ class TauAnalyzer( Analyzer ):
             self.handles['taus'] =  AutoHandle(
                 self.cfg_ana.taus, 'std::vector<reco::PFTau>'
                 )
-            self.handles['discs'] =  AutoHandle(
-                self.cfg_ana.discs, 'reco::PFTauDiscriminator'
-                )
-
+            for disc in  self.cfg_ana.discs:
+                self.handles[disc] =  AutoHandle(
+                    disc, 'reco::PFTauDiscriminator'
+                    )
 
     def beginLoop(self, setup):
         super(TauAnalyzer,self).beginLoop(setup)
@@ -23,13 +23,20 @@ class TauAnalyzer( Analyzer ):
        
     def process(self, event):
         self.readCollections( event.input )
-        discs = self.handles['discs'].product()
-        print event.iEv
+        all_discs = dict()
+        for discname in self.cfg_ana.discs:
+            all_discs[discname] = self.handles[discname].product()
         for itau, htau in  enumerate(self.handles['taus'].product()):
             tau = Tau(htau)
-            tau.disc = discs[itau].second
-            print tau.pt(), tau.disc
-        
+            if not self.cfg_ana.select_kin(tau): 
+                continue
+            tau.discs = dict()
+            for discname, disc in all_discs.iteritems():
+                value = disc[itau].second
+                tau.discs[discname] = value
+
+
+#             print tau.pt(), tau.discs['hpsPFTauDiscriminationByDecayModeFinding'], tau.discs['hpsPFTauDiscriminationByMediumIsolation']
         
 
 
