@@ -31,17 +31,30 @@ pftaus = cfg.Analyzer(
     'pf',
     taus = 'hpsPFTauProducer',
     discs = [ 
-        'hpsPFTauDiscriminationByDecayModeFindingOldDMs',
-        'hpsPFTauDiscriminationByMediumIsolation'
+        'hpsPFTauDiscriminationByDecayModeFindingOldDMs',        
+        'hpsPFTauDiscriminationByDecayModeFinding',
+        'hpsPFTauMVA3IsolationChargedIsoPtSum',
+        'hpsPFTauMVA3IsolationNeutralIsoPtSum',
+        'hpsPFTauMVA3IsolationPUcorrPtSum'
         ],
-    select_kin = lambda tau: tau.pt()>30.
+    select_kin = lambda tau: tau.pt()>30. , 
+    verbose = False
     )
+
+from Colin.TauTuple.analyzers.TauTreeProducer import TauTreeProducer
+pftaus_tree = cfg.Analyzer(
+    TauTreeProducer,
+    tree_name = 'tau_tree',
+    tree_title = 'tau ntuple',
+    taus = 'taus_pf',
+)
 
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
-        pftaus
+        pftaus,
+        pftaus_tree
     ] )
 
 # finalization of the configuration object. 
