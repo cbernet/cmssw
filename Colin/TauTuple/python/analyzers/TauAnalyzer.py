@@ -28,6 +28,14 @@ class TauAnalyzer( Analyzer ):
                 self.handles[disc] =  AutoHandle(
                     disc, 'reco::PFTauDiscriminator'
                     )
+        else:
+            self.handles['taus'] =  AutoHandle(
+                self.cfg_ana.taus, 'std::vector<reco::CaloTau>'
+                )
+            for disc in  self.cfg_ana.discs:
+                self.handles[disc] =  AutoHandle(
+                    disc, 'reco::CaloTauDiscriminator'
+                    )
 
     def beginLoop(self, setup):
         super(TauAnalyzer,self).beginLoop(setup)
