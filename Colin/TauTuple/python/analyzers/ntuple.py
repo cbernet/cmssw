@@ -49,7 +49,7 @@ def fillMet(tree, pName, met):
     fill(tree, '{pName}_phi'.format(pName=pName), met.phi())
     fill(tree, '{pName}_sumet'.format(pName=pName), met.sumEt())
 
-def bookGenTau(tree, pName, tau, pfdiscs, calodiscs):
+def bookGenTau(tree, pName, pfdiscs, calodiscs):
     bookJet(tree, pName)   
     bookTau(tree, '{pName}_calo'.format(pName=pName), calodiscs)
     bookTau(tree, '{pName}_pf'.format(pName=pName), pfdiscs)
