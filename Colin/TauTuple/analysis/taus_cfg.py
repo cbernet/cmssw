@@ -74,12 +74,12 @@ calotaus = cfg.Analyzer(
     )
 
 from Colin.TauTuple.analyzers.TauTreeProducer import TauTreeProducer
-pftaus_tree = cfg.Analyzer(
+gen_tree = cfg.Analyzer(
     TauTreeProducer,
     'pf',
     tree_name = 'tau_tree',
     tree_title = 'tau ntuple',
-    taus = 'taus_pf',
+    taus = 'tau_gen_jets',
 )
 
 calotaus_tree = cfg.Analyzer(
@@ -91,28 +91,28 @@ calotaus_tree = cfg.Analyzer(
 )
 
 from Colin.TauTuple.analyzers.Matcher import Matcher                                   
-calotaus_match_gen = cfg.Analyzer(                                                                     
+gen2calo = cfg.Analyzer(                                                                     
     Matcher, 
     instance_label = 'calo_gen',
-    match_label = 'gen',                                                                         
-    match_particles = 'tau_gen_jets',                                                                  
-    particles = 'taus_calo'                                                                          
+    match_label = 'calo',                                                                         
+    match_particles = 'taus_calo',                                                                  
+    particles = 'tau_gen_jets'                                                                        
     ) 
 
-pftaus_match_gen = cfg.Analyzer(                                                                     
+gen2pf = cfg.Analyzer(                                                                     
     Matcher,                  
     instance_label = 'pf_gen',
-    match_label = 'gen',                                                                         
-    match_particles = 'tau_gen_jets',                                                                  
-    particles = 'taus_pf'                                                                          
+    match_label = 'pf',                                                                         
+    match_particles = 'taus_pf',                                                                  
+    particles = 'tau_gen_jets'                                                                        
     ) 
 
-pftaus_match_pf = cfg.Analyzer(                                                                     
+gen2pfjets = cfg.Analyzer(                                                                     
     Matcher,                    
     instance_label = 'pf_pf',
     match_label = 'pfjet',                                                                         
     match_particles = 'pfjets',                                                                  
-    particles = 'taus_pf'                                                                          
+    particles = 'tau_gen_jets'                                                                          
     ) 
 
 
@@ -122,13 +122,15 @@ pftaus_match_pf = cfg.Analyzer(
 sequence = cfg.Sequence( [
         taugenjets, 
         pftaus,
+        calotaus, 
         pfjets,
-        pftaus_match_gen, 
-        pftaus_match_pf,
-        pftaus_tree,
-        calotaus,
-        calotaus_match_gen,
-        calotaus_tree
+        gen2calo,
+        gen2pf, 
+        gen2pfjets,
+        gen_tree,
+        # calotaus,
+        # calotaus_match_gen,
+        # calotaus_tree
     ] )
 
 # finalization of the configuration object. 

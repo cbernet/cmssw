@@ -7,7 +7,8 @@ class Tau(PhysicsObject):
 
     def __init__(self, physobj):
         super(Tau, self).__init__(physobj)
-
+        self._iso = -1
+        
     def signalCharged(self):
         '''number of charged tracks in the calo tau signal cone, or of charged 
         PFCandidates in the PFTau'''
@@ -15,6 +16,9 @@ class Tau(PhysicsObject):
             return self.signalTracks()
         else:
             return self.signalPFChargedHadrCands()
+
+    def isolation(self):
+        return self._iso
 
 
     def discstr(self, tab):
@@ -74,12 +78,15 @@ class TauAnalyzer( Analyzer ):
                 charged = tau.discs['hpsPFTauMVA3IsolationChargedIsoPtSum']
                 neutral = tau.discs['hpsPFTauMVA3IsolationNeutralIsoPtSum']
                 iso = charged + max(0., neutral-2.)
-                tau.discs['isolation'] = iso
+                tau._isolation = iso
+            else:
+                tau._isolation = -1
             if self.cfg_ana.verbose:
                 print tau
                 print tau.discstr('\t')
             taus.append(tau)
 #            print len(tau.signalCharged())
+        setattr(event, 'taudiscs_{label}'.format(label=self.instance_label), self.cfg_ana.discs)
         setattr(event, 'taus_{label}'.format(label=self.instance_label), taus)
 #        if len(taus):
 #            import pdb; pdb.set_trace()

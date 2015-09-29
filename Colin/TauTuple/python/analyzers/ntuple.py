@@ -49,25 +49,68 @@ def fillMet(tree, pName, met):
     fill(tree, '{pName}_phi'.format(pName=pName), met.phi())
     fill(tree, '{pName}_sumet'.format(pName=pName), met.sumEt())
 
-def bookTau(tree, pName, tau):
+def bookGenTau(tree, pName, tau, pfdiscs, calodiscs):
+    bookJet(tree, pName)   
+    bookTau(tree, '{pName}_calo'.format(pName=pName), calodiscs)
+    bookTau(tree, '{pName}_pf'.format(pName=pName), pfdiscs)
+    bookJet(tree, '{pName}_pfjet'.format(pName=pName))
+
+def fillGenTau(tree, pName, tau):
+    fillJet(tree, pName, tau)   
+    fillTau(tree, '{pName}_calo'.format(pName=pName), tau.match_calo)
+    fillTau(tree, '{pName}_pf'.format(pName=pName), tau.match_pf)
+    fillJet(tree, '{pName}_pfjet'.format(pName=pName), tau.match_pfjet)
+
+
+def bookTau(tree, pName, discNames):
     bookParticle(tree, pName)   
-    bookParticle(tree, '{pName}_gen'.format(pName=pName))
-    bookParticle(tree, '{pName}_pfjet'.format(pName=pName))
     var(tree, '{pName}_nsigcharged'.format(pName=pName))
-    for discName in tau.discs:
+    var(tree, '{pName}_isolation'.format(pName=pName))
+    for discName in discNames:
         var(tree, '{pName}_{disc}'.format(pName=pName,
                                           disc=discName))
         
 def fillTau(tree, pName, tau):
+    if not tau: return 
     fillParticle(tree, pName, tau)
-    if tau.match_gen:
-        fillParticle(tree, '{pName}_gen'.format(pName=pName), tau.match_gen)
-        # if tau.pt()/tau.match_gen.pt()<0.2:
-        #    import pdb; pdb.set_trace()
-    if hasattr(tau, 'match_pfjet') and tau.match_pfjet:
-        fillParticle(tree, '{pName}_pfjet'.format(pName=pName), tau.match_pfjet)
     fill(tree, '{pName}_nsigcharged'.format(pName=pName), len(tau.signalCharged()))
+    fill(tree, '{pName}_isolation'.format(pName=pName), tau.isolation())
     for discName, value in tau.discs.iteritems():
         fill(tree, '{pName}_{disc}'.format(pName=pName,
                                            disc=discName), value)
+
+
+# jet
+
+def bookComponent( tree, pName ):
+    var(tree, '{pName}_e'.format(pName=pName))
+    var(tree, '{pName}_pt'.format(pName=pName))
+    var(tree, '{pName}_num'.format(pName=pName))
+
+def fillComponent(tree, pName, component):
+    fill(tree, '{pName}_e'.format(pName=pName), component.e() )
+    fill(tree, '{pName}_pt'.format(pName=pName), component.pt() )
+    fill(tree, '{pName}_num'.format(pName=pName), component.num() )
+    
+    
+pdgids = [211, 22, 130, 11, 13]
+    
+def bookJet( tree, pName ):
+    bookParticle(tree, pName )
+    for pdgid in pdgids:
+        bookComponent(tree, '{pName}_{pdgid:d}'.format(pName=pName, pdgid=pdgid))
+    # var(tree, '{pName}_npart'.format(pName=pName))
+
+def fillJet( tree, pName, jet ):
+    if not jet: return
+    fillParticle(tree, pName, jet )
+    for pdgid in pdgids:
+        component = jet.constituents.get(pdgid, None)
+        if component is not None:
+            fillComponent(tree,
+                          '{pName}_{pdgid:d}'.format(pName=pName, pdgid=pdgid),
+                          component )
+        else:
+            import pdb; pdb.set_trace()
+            print jet
 
