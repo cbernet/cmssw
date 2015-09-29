@@ -7,7 +7,7 @@ class Tau(PhysicsObject):
 
     def __init__(self, physobj):
         super(Tau, self).__init__(physobj)
-        self._iso = -1
+        self._isolation = -1
         
     def signalCharged(self):
         '''number of charged tracks in the calo tau signal cone, or of charged 
@@ -18,7 +18,7 @@ class Tau(PhysicsObject):
             return self.signalPFChargedHadrCands()
 
     def isolation(self):
-        return self._iso
+        return self._isolation
 
 
     def discstr(self, tab):

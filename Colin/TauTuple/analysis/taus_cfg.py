@@ -13,8 +13,8 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 debug = False
 
 comp =  cfg.Component(
-    'lucia',
-    files = ['Tau_Out.root']
+    'DY',
+    files = ['Tau_Out_DY.root']
 )
 
 selectedComponents  = [comp]
@@ -28,7 +28,7 @@ if debug:
 from Colin.TauTuple.analyzers.JetReader import JetReader
 taugenjets = cfg.Analyzer(
     JetReader, 
-    'tau_gen_jets',
+    'gentau',
     jets = ('tauGenJets', 'std::vector<reco::GenJet>'),
     jet_pt = 10,
 )
@@ -79,7 +79,7 @@ gen_tree = cfg.Analyzer(
     'pf',
     tree_name = 'tau_tree',
     tree_title = 'tau ntuple',
-    taus = 'tau_gen_jets',
+    taus = 'gentau',
 )
 
 calotaus_tree = cfg.Analyzer(
@@ -96,7 +96,7 @@ gen2calo = cfg.Analyzer(
     instance_label = 'calo_gen',
     match_label = 'calo',                                                                         
     match_particles = 'taus_calo',                                                                  
-    particles = 'tau_gen_jets'                                                                        
+    particles = 'gentau'                                                                        
     ) 
 
 gen2pf = cfg.Analyzer(                                                                     
@@ -104,7 +104,7 @@ gen2pf = cfg.Analyzer(
     instance_label = 'pf_gen',
     match_label = 'pf',                                                                         
     match_particles = 'taus_pf',                                                                  
-    particles = 'tau_gen_jets'                                                                        
+    particles = 'gentau'                                                                        
     ) 
 
 gen2pfjets = cfg.Analyzer(                                                                     
@@ -112,7 +112,7 @@ gen2pfjets = cfg.Analyzer(
     instance_label = 'pf_pf',
     match_label = 'pfjet',                                                                         
     match_particles = 'pfjets',                                                                  
-    particles = 'tau_gen_jets'                                                                          
+    particles = 'gentau'                                                                          
     ) 
 
 

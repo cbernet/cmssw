@@ -19,7 +19,7 @@ class TauTreeProducer(Analyzer):
         for tau in taus:
             self.tree.reset()
             if not self.booked:
-                bookGenTau(self.tree, self.cfg_ana.taus, tau, 
+                bookGenTau(self.tree, self.cfg_ana.taus,  
                            event.taudiscs_pf, event.taudiscs_calo)
                 self.booked = True
             fillGenTau(self.tree, self.cfg_ana.taus, tau)
