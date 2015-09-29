@@ -19,9 +19,10 @@ class TauTreeProducer(Analyzer):
         for tau in taus:
             self.tree.reset()
             if not self.booked:
-                bookTau(self.tree, self.cfg_ana.taus, tau)
+                bookGenTau(self.tree, self.cfg_ana.taus, tau, 
+                           event.taudiscs_pf, event.taudiscs_calo)
                 self.booked = True
-            fillTau(self.tree, self.cfg_ana.taus, tau)
+            fillGenTau(self.tree, self.cfg_ana.taus, tau)
             self.tree.tree.Fill()
 
     def write(self, setup):
