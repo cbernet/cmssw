@@ -1,6 +1,7 @@
+import PhysicsTools.HeppyCore.framework.config as cfg
 
 def xrd(fname):
-    return '/'.join(['root://xrootd-cms.infn.it//store/user/lperrini/',
+    return '/'.join(['root://xrootd-cms.infn.it//store/user/lperrini',
                      fname])
 
 mssm_files = [
@@ -20,6 +21,9 @@ mssm_files = [
 'SUSYGluGluToHToTauTau_M-3200_TuneCUETP8M1_13TeV-pythia8/crab_NtupleSUSY/150929_112527/0000/output_9.root',
 ]
 
-for f in mssm_files: 
-    print xrd(f)
+mssm = cfg.Component(
+    'mssm',
+    files = map(xrd, mssm_files)
+) 
+
 
