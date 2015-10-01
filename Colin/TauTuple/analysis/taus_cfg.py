@@ -12,11 +12,16 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 
 debug = False
 
-comp =  cfg.Component(
-    'DY',
-    files = ['Tau_Out_DY.root']
-)
+#comp =  cfg.Component(
+#    'DY',
+#    files = ['Tau_Out_DY.root']
+#)
 
+from Colin.TauTuple.samples.lucia import mssm 
+
+comp = mssm 
+# comp.files = comp.files[:5]
+comp.splitFactor = len(comp.files)
 selectedComponents  = [comp]
 
 
