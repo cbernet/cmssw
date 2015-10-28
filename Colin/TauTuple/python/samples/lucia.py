@@ -1,4 +1,13 @@
 import PhysicsTools.HeppyCore.framework.config as cfg
+import os
+from getFiles import getFiles 
+
+mssm = cfg.Component(
+    'mssm',
+    files = getFiles(
+        "/SUSYGluGluToHToTauTau_M-3200_TuneCUETP8M1_13TeV-pythia8/crab_NtupleSUSY", 
+        user='EOS', cache=True),
+) 
 
 def xrd(fname):
     return '/'.join(['root://xrootd-cms.infn.it//store/user/lperrini',
@@ -21,9 +30,13 @@ mssm_files = [
 'SUSYGluGluToHToTauTau_M-3200_TuneCUETP8M1_13TeV-pythia8/crab_NtupleSUSY/150929_112527/0000/output_9.root',
 ]
 
-mssm = cfg.Component(
-    'mssm',
+mssm_louvain = cfg.Component(
+    'mssm_louvain',
     files = map(xrd, mssm_files)
 ) 
 
 
+if __name__ == '__main__':
+    
+    for f in mssm.files:
+        print f
