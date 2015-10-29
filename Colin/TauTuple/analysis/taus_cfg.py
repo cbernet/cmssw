@@ -17,9 +17,9 @@ debug = False
 #    files = ['Tau_Out_DY.root']
 #)
 
-from Colin.TauTuple.samples.lucia import mssm 
+from Colin.TauTuple.samples.lucia import mssm, ztautau
 
-comp = mssm 
+comp = ztautau
 # comp.files = comp.files[:5]
 comp.splitFactor = len(comp.files)
 selectedComponents  = [comp]
