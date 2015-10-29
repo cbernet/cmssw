@@ -32,6 +32,7 @@ def copy_lfn(lfn):
 if __name__ == '__main__':
 
     import sys 
+    from multiprocessing import Pool
 
     if len(sys.argv)!=4:
         print 'usage <list of LFNs> <source xrootd address> <destination xrootd address>'
@@ -48,9 +49,12 @@ if __name__ == '__main__':
     print 'source', source
     print 'destination', destination
 
-    prepare_destdir(destination)
-    map(copy_lfn, lfns)
-
+    prepare_destdir(destination)    
+    
+    # map(copy_lfn, lfns)
+    pool = Pool(processes=10)
+    pool.map(copy_lfn, lfns) 
+    
 
 # xrdcp root://xrootd-cms.infn.it//store/user/lperrini/SUSYGluGluToHToTauTau_M-3200_TuneCUETP8M1_13TeV-pythia8/crab_NtupleSUSY/151019_123821/0000/output_10.root .
 
