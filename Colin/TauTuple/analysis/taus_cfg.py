@@ -17,13 +17,16 @@ debug = False
 #    files = ['Tau_Out_DY.root']
 #)
 
-from Colin.TauTuple.samples.lucia import mssm, ztautau
+from Colin.TauTuple.samples.lucia import mssm, ztautau, qcd
 
-comp = ztautau
+comp = qcd
 # comp.files = comp.files[:5]
 comp.splitFactor = len(comp.files)
 selectedComponents  = [comp]
 
+genjets_collection = 'tauGenJets'
+if 'qcd' in comp.name.lower():
+    genjets_collection = 'ak4GenJetsNoNu'
 
 if debug:
     print 'DEBUG MODE !!!'
@@ -31,10 +34,10 @@ if debug:
     comp.splitFactor = 1
 
 from Colin.TauTuple.analyzers.JetReader import JetReader
-taugenjets = cfg.Analyzer(
+genjets = cfg.Analyzer(
     JetReader, 
-    'gentau',
-    jets = ('tauGenJets', 'std::vector<reco::GenJet>'),
+    'gen',
+    jets = (genjets_collection, 'std::vector<reco::GenJet>'),
     jet_pt = 10,
 )
 
@@ -84,16 +87,9 @@ gen_tree = cfg.Analyzer(
     'pf',
     tree_name = 'tau_tree',
     tree_title = 'tau ntuple',
-    taus = 'gentau',
+    taus = 'gen',
 )
 
-calotaus_tree = cfg.Analyzer(
-    TauTreeProducer,
-    'calo',
-    tree_name = 'tau_tree',
-    tree_title = 'tau ntuple',
-    taus = 'taus_calo',
-)
 
 from Colin.TauTuple.analyzers.Matcher import Matcher                                   
 gen2calo = cfg.Analyzer(                                                                     
@@ -101,7 +97,7 @@ gen2calo = cfg.Analyzer(
     instance_label = 'calo_gen',
     match_label = 'calo',                                                                         
     match_particles = 'taus_calo',                                                                  
-    particles = 'gentau'                                                                        
+    particles = 'gen'                                                                        
     ) 
 
 gen2pf = cfg.Analyzer(                                                                     
@@ -109,7 +105,7 @@ gen2pf = cfg.Analyzer(
     instance_label = 'pf_gen',
     match_label = 'pf',                                                                         
     match_particles = 'taus_pf',                                                                  
-    particles = 'gentau'                                                                        
+    particles = 'gen'                                                                        
     ) 
 
 gen2pfjets = cfg.Analyzer(                                                                     
@@ -117,7 +113,7 @@ gen2pfjets = cfg.Analyzer(
     instance_label = 'pf_pf',
     match_label = 'pfjet',                                                                         
     match_particles = 'pfjets',                                                                  
-    particles = 'gentau'                                                                          
+    particles = 'gen'                                                                          
     ) 
 
 
@@ -125,7 +121,7 @@ gen2pfjets = cfg.Analyzer(
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
-        taugenjets, 
+        genjets, 
         pftaus,
         calotaus, 
         pfjets,
@@ -133,9 +129,6 @@ sequence = cfg.Sequence( [
         gen2pf, 
         gen2pfjets,
         gen_tree,
-        # calotaus,
-        # calotaus_match_gen,
-        # calotaus_tree
     ] )
 
 # finalization of the configuration object. 
