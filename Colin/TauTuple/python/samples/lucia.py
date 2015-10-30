@@ -53,5 +53,5 @@ mssm_louvain = cfg.Component(
 
 if __name__ == '__main__':
     
-    for f in ztautau.files:
+    for f in qcd.files:
         print f
