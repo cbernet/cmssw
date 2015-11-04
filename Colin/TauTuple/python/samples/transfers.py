@@ -52,7 +52,7 @@ if __name__ == '__main__':
     prepare_destdir(destination)    
     
     # map(copy_lfn, lfns)
-    pool = Pool(processes=10)
+    pool = Pool(processes=3)
     pool.map(copy_lfn, lfns) 
     
 
