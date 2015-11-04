@@ -19,8 +19,9 @@ ztautau = cfg.Component(
 qcd = cfg.Component(
     'qcd',
     files = getFiles(
-        "/QCD_Pt-15to7000_TuneCUETP8M1_Flat_13TeV_pythia8/crab_NtupleQCD/150929_103656", 
-        user='cbern', cache=True),
+       "/QCD_Pt-15to7000_TuneCUETP8M1_Flat_13TeV_pythia8/crab_NtupleQCD/150929_103656/V2", 
+       basedir='/store/cmst3/user/cbern',
+       user='EOS', cache=True),
     ) 
 
 
