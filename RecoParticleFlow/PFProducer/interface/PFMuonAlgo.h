@@ -63,7 +63,7 @@ class PFMuonAlgo {
 
   static void printMuonProperties( const reco::MuonRef& muonRef );
 
-
+  static std::string trackInfo( const reco::TrackRef& trackRef);  
 
 
   ////POST CLEANING AND MOMEMNTUM ASSIGNMENT

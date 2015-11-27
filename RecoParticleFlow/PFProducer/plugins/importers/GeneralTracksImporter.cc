@@ -136,7 +136,8 @@ importToBlock( const edm::Event& e,
       trkElem = new reco::PFBlockElementTrack( pftrackref );
       if (thisIsAPotentialMuon && _debug) {
 	std::cout << "Potential Muon P " <<  pftrackref->trackRef()->p() 
-		  << " pt " << pftrackref->trackRef()->p() << std::endl; 
+		  << " pt " << pftrackref->trackRef()->p() << std::endl;
+	pfmu_->printMuonProperties(muonref);
       }
       if( muId != -1 ) trkElem->setMuonRef(muonref);
       elems.emplace_back(trkElem);
