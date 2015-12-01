@@ -19,7 +19,7 @@ debug = False
 
 from Colin.TauTuple.samples.lucia import mssm, ztautau, qcd
 
-comp = qcd
+comp = mssm
 # comp.files = comp.files[:5]
 comp.splitFactor = len(comp.files) / 4 
 selectedComponents  = [comp]
