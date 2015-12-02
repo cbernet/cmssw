@@ -7,7 +7,7 @@ doublemu_smallmet = cfg.DataComponent(
     files = getFiles(
         "/DoubleMuon/Run2015C-PromptReco-v1/RECO/RECO_SmallMET", 
         user='cbern', cache=True),
-    json = '{cmssw}/src/Colin/MetScanning/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
+    json = '{cmssw}/src/Colin.Met/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
 ) 
 
 doublemu_smallmet_fix = cfg.DataComponent(
@@ -15,7 +15,7 @@ doublemu_smallmet_fix = cfg.DataComponent(
     files = getFiles(
         "/DoubleMuon/Run2015C-PromptReco-v1/RECO/RECO_SmallMET/METFIX_TestProd", 
         user='cbern', cache=True),
-    json = '{cmssw}/src/Colin/MetScanning/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
+    json = '{cmssw}/src/Colin.Met/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
 ) 
 
 samples = [

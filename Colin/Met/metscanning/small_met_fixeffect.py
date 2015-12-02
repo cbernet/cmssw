@@ -3,7 +3,7 @@ from ROOT import TFile, TLegend, TH1, gPad, gDirectory, TCanvas
 before = 'SmallMET_nofix'
 after = 'SmallMET_fix'
 
-treefile = 'doublemu/Colin.MetScanning.analyzers.MetTreeProducer.MetTreeProducer_1/met_tree.root'
+treefile = 'doublemu/Colin.Met.analyzers.MetTreeProducer.MetTreeProducer_1/met_tree.root'
 
 class Plot(object):
     def __init__(self, dirname):

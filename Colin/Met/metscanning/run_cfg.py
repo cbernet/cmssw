@@ -8,7 +8,7 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 #     'test_component',
 #     files = ['pickevents_DoubleEG.root'],
 #     )
-from Colin.MetScanning.samples.reco import doublemu_smallmet_fix as comp
+from Colin.Met.samples.reco import doublemu_smallmet_fix as comp
 
 selectedComponents  = [comp]
 comp.splitFactor = 12
@@ -18,12 +18,12 @@ json = cfg.Analyzer(
     JSONAnalyzer
 )
 
-from Colin.MetScanning.analyzers.PFMetAnalyzer import PFMetAnalyzer
+from Colin.Met.analyzers.PFMetAnalyzer import PFMetAnalyzer
 pfmet_ana = cfg.Analyzer(
     PFMetAnalyzer,
     )
 
-from Colin.MetScanning.analyzers.MetTreeProducer import MetTreeProducer
+from Colin.Met.analyzers.MetTreeProducer import MetTreeProducer
 met_tree = cfg.Analyzer(
     MetTreeProducer,
     tree_name = 'events',

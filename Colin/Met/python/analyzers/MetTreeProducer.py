@@ -18,6 +18,8 @@ class MetTreeProducer(Analyzer):
         for pdgid in pdgids: 
             bookMet(self.tree, 'pfmet_{pdgid}'.format(pdgid=pdgid))
         bookMet(self.tree, 'pfmet_maod_uc')
+        bookMet(self.tree, 'pfmet_maod')
+        bookMet(self.tree, 'calomet_maod_uc')
         bookEvent(self.tree)
 
     def process(self, event):
@@ -29,12 +31,15 @@ class MetTreeProducer(Analyzer):
             for pdgid, met in event.pfmets.iteritems():
                 fillMet(self.tree, 'pfmet_{pdgid}'.format(pdgid=pdgid), met)
         if hasattr(event, 'pfmet_maod_uc'):
-            fillMet(self.tree, 'pfmet_maod_uc', event.pfmet_maod_uncorr)
+            fillMet(self.tree, 'pfmet_maod_uc', event.pfmet_maod_uc)
+        if hasattr(event, 'pfmet_maod'):
+            fillMet(self.tree, 'pfmet_maod', event.pfmet_maod)
+        if hasattr(event, 'calomet_maod_uc'):
+            fillMet(self.tree, 'calomet_maod_uc', event.calomet_maod_uc)
         self.tree.tree.Fill()
 
 
     def write(self, setup):
         self.rootfile.Write()
         self.rootfile.Close()
-
 

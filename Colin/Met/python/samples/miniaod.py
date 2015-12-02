@@ -7,7 +7,7 @@ doublemu = cfg.DataComponent(
     files = getFiles(
         "/DoubleMuon/Run2015C-PromptReco-v1/MINIAOD", 
         user='CMS', cache=True),
-    json = '{cmssw}/src/Colin/MetScanning/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
+    json = '{cmssw}/src/Colin.Met/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
 ) 
 
 doublemu_json =  cfg.DataComponent(
@@ -15,7 +15,7 @@ doublemu_json =  cfg.DataComponent(
     files = getFiles(
         "/DoubleMuon/Run2015C-PromptReco-v1/MINIAOD_1", 
         user='EOS',basedir='/store/cmst3/user/cbern/CMG', cache=True),
-    json = '{cmssw}/src/Colin/MetScanning/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
+    json = '{cmssw}/src/Colin.Met/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
 ) 
 
 doublemu_lowmet =  cfg.DataComponent(
@@ -23,7 +23,7 @@ doublemu_lowmet =  cfg.DataComponent(
     files = getFiles(
         "/DoubleMuon/Run2015C-PromptReco-v1/MINIAOD_1/SmallMET", 
         user='EOS',basedir='/store/cmst3/user/cbern/CMG', cache=True),
-    json = '{cmssw}/src/Colin/MetScanning/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
+    json = '{cmssw}/src/Colin.Met/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
 ) 
 
 samples = [
