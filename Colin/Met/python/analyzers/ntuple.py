@@ -41,10 +41,14 @@ def fillParticle( tree, pName, particle ):
 
 def bookMet(tree, pName):
     var(tree, '{pName}_pt'.format(pName=pName))
+    var(tree, '{pName}_px'.format(pName=pName))
+    var(tree, '{pName}_py'.format(pName=pName))
     var(tree, '{pName}_phi'.format(pName=pName))
     var(tree, '{pName}_sumet'.format(pName=pName))
 
 def fillMet(tree, pName, met):
     fill(tree, '{pName}_pt'.format(pName=pName), met.pt())
+    fill(tree, '{pName}_px'.format(pName=pName), met.px())
+    fill(tree, '{pName}_py'.format(pName=pName), met.py())
     fill(tree, '{pName}_phi'.format(pName=pName), met.phi())
     fill(tree, '{pName}_sumet'.format(pName=pName), met.sumEt())

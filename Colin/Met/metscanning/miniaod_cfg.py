@@ -12,7 +12,7 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 
 debug = False
 
-from Colin.MetScanning.samples.miniaod import doublemu_lowmet as doublemu
+from Colin.Met.samples.miniaod import doublemu_lowmet as doublemu
 
 selectedComponents  = [doublemu]
 
@@ -24,7 +24,7 @@ if debug:
     comp.files = comp.files[:1]
     comp.splitFactor = 1
 
-from Colin.MetScanning.analyzers.MiniAODReader import MiniAODReader
+from Colin.Met.analyzers.MiniAODReader import MiniAODReader
 source = cfg.Analyzer(
     MiniAODReader,
     read_pfcands = True
@@ -35,12 +35,12 @@ json = cfg.Analyzer(
     JSONAnalyzer
 )
 
-from Colin.MetScanning.analyzers.MetAnalyzer import MetAnalyzer
+from Colin.Met.analyzers.MetAnalyzer import MetAnalyzer
 met_ana = cfg.Analyzer(
     MetAnalyzer,
     )
 
-from Colin.MetScanning.analyzers.MetTreeProducer import MetTreeProducer
+from Colin.Met.analyzers.MetTreeProducer import MetTreeProducer
 met_tree = cfg.Analyzer(
     MetTreeProducer,
     tree_name = 'events',
