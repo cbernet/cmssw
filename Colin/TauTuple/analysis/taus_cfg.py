@@ -21,7 +21,7 @@ from Colin.TauTuple.samples.lucia import mssm, ztautau, qcd
 
 comp = mssm
 # comp.files = comp.files[:5]
-comp.splitFactor = len(comp.files) / 4 
+comp.splitFactor = len(comp.files)
 selectedComponents  = [comp]
 
 genjets_collection = 'tauGenJets'
