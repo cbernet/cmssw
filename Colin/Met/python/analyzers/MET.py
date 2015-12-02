@@ -5,6 +5,12 @@ class BaseMET(object):
     def pt(self):
         return self._pt
 
+    def px(self):
+        return self._px
+
+    def py(self):
+        return self._py
+
     def phi(self):
         return self._phi
 
@@ -27,6 +33,8 @@ class METBuilder(BaseMET):
         self.label = label
         self._p4, self._sum_et = self.compute_met(ptcs)
         self._pt = self._p4.pt()
+        self._px = self._p4.px()
+        self._py = self._p4.py()
         self._phi = self._p4.phi()
 
     def compute_met(self, ptcs):
@@ -44,8 +52,10 @@ class METBuilder(BaseMET):
 
 class METSimple(BaseMET): 
     
-    def __init__(self, pt, phi, sumet, label):
+    def __init__(self, pt, px, py, phi, sumet, label):
         self._pt = pt 
         self._phi = phi 
+        self._px = px 
+        self._py = py
         self._sum_et = sumet
         self.label = label

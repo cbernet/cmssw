@@ -3,7 +3,7 @@
 from PhysicsTools.Heppy.analyzers.core.Analyzer import Analyzer
 from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
 from PhysicsTools.Heppy.physicsobjects.PhysicsObject import PhysicsObject as PFCandidate
-from Colin.MetScanning.analyzers.MET import METBuilder
+from Colin.Met.analyzers.MET import METBuilder
 
 class PFMetAnalyzer( Analyzer ):
 

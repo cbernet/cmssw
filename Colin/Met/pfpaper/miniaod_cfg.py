@@ -3,7 +3,7 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 
 debug = True
 
-from Colin.MetScanning.samples.pfpaper_nopu import qcd, ttbar
+from Colin.Met.samples.pfpaper_nopu import qcd, ttbar
 qcd.splitFactor = 10
 
 selectedComponents  = [qcd]
@@ -15,18 +15,23 @@ if debug:
     comp.files = comp.files[:1]
     comp.splitFactor = 1
 
-from Colin.MetScanning.analyzers.MiniAODReader import MiniAODReader
+from PhysicsTools.Heppy.analyzers.core.JSONAnalyzer import JSONAnalyzer
+json = cfg.Analyzer(
+    JSONAnalyzer
+)
+
+from Colin.Met.analyzers.MiniAODReader import MiniAODReader
 source = cfg.Analyzer(
     MiniAODReader,
     read_pfcands = False
     )
 
-from Colin.MetScanning.analyzers.MetAnalyzer import MetAnalyzer
+from Colin.Met.analyzers.MetAnalyzer import MetAnalyzer
 met_ana = cfg.Analyzer(
     MetAnalyzer,
     )
 
-from Colin.MetScanning.analyzers.MetTreeProducer import MetTreeProducer
+from Colin.Met.analyzers.MetTreeProducer import MetTreeProducer
 met_tree = cfg.Analyzer(
     MetTreeProducer,
     tree_name = 'events',
@@ -37,6 +42,7 @@ met_tree = cfg.Analyzer(
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
+        json,
         source, 
         met_ana,
         met_tree

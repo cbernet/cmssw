@@ -4,7 +4,7 @@ import os
 ##____________________________________________________________________________||
 process = cms.Process("JSON")
 
-json_file = '{cmssw}/src/Colin/MetScanning/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
+json_file = '{cmssw}/src/Colin.Met/python/samples/vince_25ns.json'.format(cmssw=os.environ['CMSSW_BASE'])
 dataset_name = '/DoubleMuon/Run2015C-PromptReco-v1/MINIAOD'
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
