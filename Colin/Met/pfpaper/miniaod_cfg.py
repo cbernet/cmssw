@@ -1,10 +1,10 @@
 import os
 import PhysicsTools.HeppyCore.framework.config as cfg
 
-debug = True
+debug = False
 
 from Colin.Met.samples.pfpaper_nopu import qcd, ttbar
-qcd.splitFactor = 10
+qcd.splitFactor = 8
 
 selectedComponents  = [qcd]
 
