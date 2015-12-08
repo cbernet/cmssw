@@ -30,28 +30,33 @@ process.load("JetMETCorrections.Type1MET.correctionTermsPfMetMult_cff")
 process.load("JetMETCorrections.Type1MET.correctedMet_cff")
 
 from CondCore.DBCommon.CondDBSetup_cfi import *
-era="PFGED_25nsV1_MC"
-process.jec = cms.ESSource("PoolDBESSource",CondDBSetup,
-                               connect = cms.string( "sqlite:"+era+".db"),
-                               toGet =  cms.VPSet(
-            cms.PSet(
-                record = cms.string("JetCorrectionsRecord"),
-                tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PF"),
-                label= cms.untracked.string("AK4PF")
-                ),
-            cms.PSet(
-                record = cms.string("JetCorrectionsRecord"),
-                tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4Calo"),
-                label= cms.untracked.string("AK4Calo")
-                ),
+import os 
 
-#            cms.PSet(
-#                record = cms.string("JetCorrectionsRecord"),
-#                tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PFchs"),
-#                label= cms.untracked.string("AK4PFchs")
-#                ),
-            )
-                               )
+era="PFGED_25nsV1_MC"
+fname = "sqlite_file:"+os.getcwd()+'/'+era+".db"
+process.jec = cms.ESSource(
+    "PoolDBESSource",
+    CondDBSetup,
+    connect = cms.string( fname ),
+    toGet =  cms.VPSet(
+        cms.PSet(
+            record = cms.string("JetCorrectionsRecord"),
+            tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PF"),
+            label= cms.untracked.string("AK4PF")
+            ),
+        cms.PSet(
+            record = cms.string("JetCorrectionsRecord"),
+            tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4Calo"),
+            label= cms.untracked.string("AK4Calo")
+            ),
+
+        #            cms.PSet(
+        #                record = cms.string("JetCorrectionsRecord"),
+        #                tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PFchs"),
+        #                label= cms.untracked.string("AK4PFchs")
+        #                ),
+        )
+    )
 process.es_prefer_jec = cms.ESPrefer("PoolDBESSource",'jec')
 
 
@@ -59,18 +64,27 @@ process.es_prefer_jec = cms.ESPrefer("PoolDBESSource",'jec')
 
 ##____________________________________________________________________________||
 from JetMETCorrections.Type1MET.testInputFiles_cff import corrMETtestInputFiles
+
+from Colin.Met.samples.pfpaper_nopu import qcd_reco, ttbar_aod
+
 process.source = cms.Source(
     "PoolSource",
-    fileNames = cms.untracked.vstring("root://eoscms//eos/cms/store/relval/CMSSW_7_4_1/RelValTTbar_13/GEN-SIM-RECO/PU25ns_MCRUN2_74_V9_gensim71X-v1/00000/ACC93B1D-9AEC-E411-919D-0025905A60B8.root")
+#      fileNames = cms.untracked.vstring("root://eoscms//eos/cms/store/relval/CMSSW_7_4_1/RelValTTbar_13/GEN-SIM-RECO/PU25ns_MCRUN2_74_V9_gensim71X-v1/00000/ACC93B1D-9AEC-E411-919D-0025905A60B8.root")
+#    fileNames = cms.untracked.vstring("file:ACC93B1D-9AEC-E411-919D-0025905A60B8.root")
+#    fileNames = cms.untracked.vstring('/store/relval/CMSSW_7_4_0/RelValProdTTbar/AODSIM/MCRUN1_74_V4-v1/00000/3C61F496-DEDA-E411-A468-0025905A6134.root')
+    fileNames = cms.untracked.vstring(qcd_reco.files)
     )
+process.source.fileNames = process.source.fileNames[:10]
 
 ##____________________________________________________________________________||
 process.out = cms.OutputModule(
     "PoolOutputModule",
-    fileName = cms.untracked.string('corrMET_caloMet.root'),
+    fileName = cms.untracked.string('corrMET.root'),
     SelectEvents   = cms.untracked.PSet( SelectEvents = cms.vstring('p') ),
     outputCommands = cms.untracked.vstring(
         'drop *',
+        'keep recoPFMETs_*_*_*',
+        'keep recoCaloMETs_*_*_*',
         'keep *_*_*_TEST'
         )
     )
@@ -82,10 +96,10 @@ process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(5000))
 
 ##____________________________________________________________________________||
 process.p = cms.Path(
-#    process.correctionTermsCaloMet +
-#    process.caloMetT1 + 
-    process.correctionTermsPfMetType1Type2 
-#    process.pfMetT1
+    process.correctionTermsCaloMet +
+    process.caloMetT1 + 
+    process.correctionTermsPfMetType1Type2 +
+    process.pfMetT1
 )
 
 
