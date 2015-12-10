@@ -74,7 +74,7 @@ process.source = cms.Source(
 #    fileNames = cms.untracked.vstring('/store/relval/CMSSW_7_4_0/RelValProdTTbar/AODSIM/MCRUN1_74_V4-v1/00000/3C61F496-DEDA-E411-A468-0025905A6134.root')
     fileNames = cms.untracked.vstring(qcd_reco.files)
     )
-process.source.fileNames = process.source.fileNames[:10]
+# process.source.fileNames = process.source.fileNames[:10]
 
 ##____________________________________________________________________________||
 process.out = cms.OutputModule(
@@ -92,7 +92,7 @@ process.out = cms.OutputModule(
 ##____________________________________________________________________________||
 process.options   = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 process.MessageLogger.cerr.FwkReport.reportEvery = 50
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(5000))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(20000))
 
 ##____________________________________________________________________________||
 process.p = cms.Path(
@@ -107,3 +107,6 @@ process.p = cms.Path(
 process.e1 = cms.EndPath(
     process.out
     )
+
+process.corrCaloMetType1.type1JetPtThreshold = 30.
+
