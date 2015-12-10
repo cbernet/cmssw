@@ -13,6 +13,9 @@ if debug:
     comp = selectedComponents[0]
     comp.files = comp.files[:1]
     comp.splitFactor = 1
+else:
+    for comp in selectedComponents: 
+        comp.splitFactor = len(comp.files)
 
 from PhysicsTools.Heppy.analyzers.core.JSONAnalyzer import JSONAnalyzer
 json = cfg.Analyzer(

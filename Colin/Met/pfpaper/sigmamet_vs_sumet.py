@@ -14,9 +14,9 @@ class MetVsSumEt(object):
         self.h2d = TH2F(hname, hname, 
                         nx, xmin, xmax, ny, ymin, ymax)
         tree.Project(self.h2d.GetName(), 
-                      'sqrt(2)*{metname}_px:{metname}_sumet'.format(metname=metname))
+                      '{metname}_px:pfMetT1_sumet'.format(metname=metname))
         tree.Project(self.h2d.GetName(), 
-                     'sqrt(2)*{metname}_py:{metname}_sumet'.format(metname=metname))
+                     '{metname}_py:pfMetT1_sumet'.format(metname=metname))
         # fr = []
         # for ibin in range(self.h2d.GetNbinsX()):
         #     bin = ibin+1
@@ -33,7 +33,7 @@ class MetVsSumEt(object):
         self.h2d.FitSlicesY()
         self.hmean = gDirectory.Get( self.h2d.GetName() + '_1' )
         self.hsigma = gDirectory.Get( self.h2d.GetName() + '_2' )
-        self.hsigma.SetYTitle('#sigma(MET)')
+        self.hsigma.SetYTitle('#sigma(MET_{x,y})')
         self.hchi2 = gDirectory.Get( self.h2d.GetName() + '_chi2' )
 
     def draw2D(self, *args):
@@ -61,20 +61,33 @@ class MetVsSumEt(object):
         return x, dx, mean, dmean, sigma, dsigma
         
 
-args = (tree, 50, 0, 1000, 100, -100, 100)
+args = (tree, 20, 0, 400, 100, -100, 100)
 
-metcalo = MetVsSumEt('calomet_maod_uc', *args) 
-metcalo.format(traditional)
+metcalo = MetVsSumEt('caloMet', *args) 
+metcalo.format(traditional_style)
 metcalo.hsigma.Draw()
+metcalo.hsigma.GetYaxis().SetRangeUser(0,30)
+metcalo.hsigma.GetXaxis().SetNdivisions(10)
 
-metpf = MetVsSumEt('pfmet_maod', *args) 
-metpf.format(pf)
+metpf = MetVsSumEt('pfMet', *args) 
+metpf.format(pf_style)
 metpf.hsigma.Draw('same')
 
 legend = TLegend(0.21,0.79, 0.49, 0.92)
 legend.AddEntry(metcalo.hsigma, 'Calo MET', 'p')
 legend.AddEntry(metpf.hsigma, 'PF MET', 'p')
 legend.Draw('same')
+
+metcalot1 = MetVsSumEt('caloMetT1', *args) 
+metcalot1.format(traditional_style)
+metcalot1.hsigma.SetMarkerStyle(25)
+metcalot1.hsigma.Draw('same')
+
+metpft1 = MetVsSumEt('pfMetT1', *args) 
+metpft1.format(pf_style)
+metpft1.hsigma.SetMarkerStyle(4)
+metpft1.hsigma.Draw('same')
+
 
 # bin = 10
 # hslice = pf.h2d.ProjectionY("", bin, bin, "")
