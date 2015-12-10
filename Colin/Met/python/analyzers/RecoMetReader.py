@@ -26,7 +26,8 @@ class RecoMetReader( Analyzer ):
         metsimple = METSimple(
             met.pt(), met.px(), met.py(), met.phi(), met.sumEt(), self.colname
             )
-        print metsimple
+        if self.verbose: 
+            print metsimple
         setattr(event, self.colname, metsimple)
 
 
