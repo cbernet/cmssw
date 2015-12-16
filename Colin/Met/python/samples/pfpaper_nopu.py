@@ -28,7 +28,8 @@ for block in qcd_reco_blocks:
 
 qcd_small_8dec = cfg.MCComponent(
     'qcd_small_8dec',
-    files = glob.glob('QCD_small_8dec/Job_*/*.root')
+    # files = glob.glob('QCD_small_8dec/Job_*/*.root')
+    files = glob.glob('QCD_small_bcd7015/Job_*/*.root')
     )
 
 ttbar_aod = cfg.MCComponent(
