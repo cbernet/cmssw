@@ -31,13 +31,17 @@ process.load("JetMETCorrections.Type1MET.correctedMet_cff")
 
 from CondCore.DBCommon.CondDBSetup_cfi import *
 import os 
+import shutil 
 
 era="PFGED_25nsV1_MC"
-fname = "sqlite_file:"+os.getcwd()+'/'+era+".db"
+fname = era+'.db'
+shutil.copy(os.environ['CMSSW_BASE']+'/src/Colin/Met/pfpaper/'+fname, fname)
+connectstr = 'sqlite_file:'+os.getcwd()+'/'+fname
+
 process.jec = cms.ESSource(
     "PoolDBESSource",
     CondDBSetup,
-    connect = cms.string( fname ),
+    connect = cms.string( connectstr ),
     toGet =  cms.VPSet(
         cms.PSet(
             record = cms.string("JetCorrectionsRecord"),
