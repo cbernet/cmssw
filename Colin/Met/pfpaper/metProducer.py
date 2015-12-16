@@ -85,6 +85,7 @@ process.out = cms.OutputModule(
         'drop *',
         'keep recoPFMETs_*_*_*',
         'keep recoCaloMETs_*_*_*',
+        'keep recoGenMETs_*_*_*',
         'keep *_*_*_TEST'
         )
     )
@@ -92,7 +93,7 @@ process.out = cms.OutputModule(
 ##____________________________________________________________________________||
 process.options   = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 process.MessageLogger.cerr.FwkReport.reportEvery = 50
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(20000))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 ##____________________________________________________________________________||
 process.p = cms.Path(
@@ -108,5 +109,5 @@ process.e1 = cms.EndPath(
     process.out
     )
 
-process.corrCaloMetType1.type1JetPtThreshold = 30.
+# process.corrCaloMetType1.type1JetPtThreshold = 30.
 
