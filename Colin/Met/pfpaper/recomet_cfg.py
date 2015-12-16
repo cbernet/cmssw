@@ -1,7 +1,7 @@
 import os
 import PhysicsTools.HeppyCore.framework.config as cfg
 
-debug = False
+debug = True
 
 from Colin.Met.samples.pfpaper_nopu import qcd_small_8dec as qcd
 
@@ -12,6 +12,8 @@ if debug:
     selectedComponents = selectedComponents[:1]
     comp = selectedComponents[0]
     comp.files = comp.files[:1]
+    comp.files = ['corrMET.root']
+    print comp.files
     comp.splitFactor = 1
 else:
     for comp in selectedComponents: 
@@ -23,6 +25,10 @@ json = cfg.Analyzer(
 )
 
 from Colin.Met.analyzers.RecoMetReader import RecoMetReader
+genmet = cfg.Analyzer(
+    RecoMetReader,
+    met = ('std::vector< reco::GenMET >', 'genMetTrue')
+    )
 pfmet = cfg.Analyzer(
     RecoMetReader,
     met = ('std::vector< reco::PFMET >', 'pfMet')
@@ -46,7 +52,7 @@ met_tree = cfg.Analyzer(
     MetTreeProducer,
     tree_name = 'events',
     tree_title = 'MET tree',
-    mets = ('pfMet', 'pfMetT1', 'caloMet', 'caloMetT1')
+    mets = ('genMetTrue', 'pfMet', 'pfMetT1', 'caloMet', 'caloMetT1')
     )
 
 
@@ -54,6 +60,7 @@ met_tree = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
         json,
+        genmet, 
         pfmet, 
         pfmetcor,
         calomet,
