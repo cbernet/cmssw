@@ -20,9 +20,8 @@ public:
     _cleanBadConvBrems(conf.existsAs<bool>("cleanBadConvertedBrems") ? conf.getParameter<bool>("cleanBadConvertedBrems") : false),
     _debug(conf.getUntrackedParameter<bool>("debug",false)) {
     
-    pfmu_ = std::unique_ptr<PFMuonAlgo>(new PFMuonAlgo());
-    pfmu_->setParameters(conf);
-    
+    // pfmu_ = std::unique_ptr<PFMuonAlgo>(new PFMuonAlgo());
+    _pfmu.setParameters(conf);
   }
   
   void importToBlock( const edm::Event& ,
@@ -40,7 +39,8 @@ private:
   const std::vector<unsigned> _NHitCut;
   const bool _useIterTracking,_cleanBadConvBrems,_debug;
 
-  std::unique_ptr<PFMuonAlgo> pfmu_;
+  // std::unique_ptr<PFMuonAlgo> pfmu_;
+  PFMuonAlgo _pfmu;
 
 };
 
@@ -136,7 +136,7 @@ importToBlock( const edm::Event& e,
       if (thisIsAPotentialMuon && _debug) {
 	std::cout << "Potential Muon P " <<  pftrackref->trackRef()->p() 
 		  << " pt " << pftrackref->trackRef()->p() << std::endl;
-	pfmu_->printMuonProperties(muonref);
+	_pfmu.printMuonProperties(muonref);
       }
       if( muId != -1 ) trkElem->setMuonRef(muonref);
       elems.emplace_back(trkElem);
@@ -240,6 +240,6 @@ muAssocToTrack( const reco::TrackRef& trackref,
 
 bool GeneralTracksImporter::
 isPotentialMuon(const reco::MuonRef& muonref) const {
-  return (pfmu_->hasValidTrack(muonref,true)&&PFMuonAlgo::isLooseMuon(muonref)) || 
-    (pfmu_->hasValidTrack(muonref,false)&&PFMuonAlgo::isMuon(muonref));
+  return (_pfmu.hasValidTrack(muonref,true) && PFMuonAlgo::isLooseMuon(muonref)) || 
+    (_pfmu.hasValidTrack(muonref,false)&&PFMuonAlgo::isMuon(muonref));
 }
