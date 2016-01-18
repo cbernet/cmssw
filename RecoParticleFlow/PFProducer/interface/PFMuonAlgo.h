@@ -50,9 +50,6 @@ class PFMuonAlgo {
 
   static bool isGlobalLooseMuon( const reco::MuonRef& muonRef );
 
-
-
-
   static bool isTrackerTightMuon( const reco::MuonRef& muonRef );
   
   static bool isTrackerLooseMuon( const reco::MuonRef& muonRef );
@@ -66,8 +63,9 @@ class PFMuonAlgo {
   static std::string trackInfo( const reco::TrackRef& trackRef);  
 
 
-  ////POST CLEANING AND MOMEMNTUM ASSIGNMENT
-  bool hasValidTrack(const reco::MuonRef& muonRef,bool loose =false) const;
+  ///\returns True if the muon has at least 1 track. 
+  /// @param[in] loose: if false, a pt resolution better than maxDPtOPt_ is requested
+  bool hasValidTrack(const reco::MuonRef& muonRef, bool loose=false) const;
 
   //Make a PF Muon : Basic method
   bool reconstructMuon(reco::PFCandidate&, const reco::MuonRef&,bool allowLoose = false);
@@ -108,10 +106,16 @@ class PFMuonAlgo {
   //Gives the track with the smallest Dpt/Pt
   MuonTrackTypePair getTrackWithSmallestError(const std::vector<MuonTrackTypePair>&);
 
-  std::vector<reco::Muon::MuonTrackTypePair> muonTracks(const reco::MuonRef& muon,bool includeSA = false,double dpt = 1e+9) const;
+  ///\returns the muon tracks with their type. 
+  /// @param[in] includeSA include standalone tracks? 
+  /// @param[in] dptOverPt maximum relative pT resolution on the track 
+  std::vector<reco::Muon::MuonTrackTypePair> muonTracks(const reco::MuonRef& muon,
+							bool includeSA = false,
+							double dptOverPt = 1e+9) const;
 
-  //Gets the good tracks
-  std::vector<reco::Muon::MuonTrackTypePair> goodMuonTracks(const reco::MuonRef& muon,bool includeSA = false) const;
+  ///\returns the muon tracks with a pT resolution better than maxDPtOPt_ with their type, 
+  std::vector<reco::Muon::MuonTrackTypePair> goodMuonTracks(const reco::MuonRef& muon,
+							    bool includeSA = false) const;
 
 
   //Estimate MET and SUmET for post cleaning
