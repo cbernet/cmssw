@@ -32,6 +32,7 @@ private:
   bool goodPtResolution( const reco::TrackRef& trackref) const;
   int muAssocToTrack( const reco::TrackRef& trackref,
 		      const edm::Handle<reco::MuonCollection>& muonh) const;
+  bool isPotentialMuon(const reco::MuonRef& muonref) const;
 
   edm::EDGetTokenT<reco::PFRecTrackCollection> _src;
   edm::EDGetTokenT<reco::MuonCollection> _muons;
@@ -53,7 +54,7 @@ importToBlock( const edm::Event& e,
   typedef BlockElementImporterBase::ElementList::value_type ElementType;  
   edm::Handle<reco::PFRecTrackCollection> tracks;
   e.getByToken(_src,tracks);
-   edm::Handle<reco::MuonCollection> muons;
+  edm::Handle<reco::MuonCollection> muons;
   e.getByToken(_muons,muons);
   elems.reserve(elems.size() + tracks->size());
   std::vector<bool> mask(tracks->size(),true);
@@ -107,7 +108,7 @@ importToBlock( const edm::Event& e,
       const int muId = muAssocToTrack( (*tk_elem)->trackRef(), muons );
       if( muId != -1 ) {
 	muonref= reco::MuonRef( muons, muId );
-	if( PFMuonAlgo::isLooseMuon(muonref) || PFMuonAlgo::isMuon(muonref) ) {
+	if( isPotentialMuon(muonref) ) {
 	  static_cast<reco::PFBlockElementTrack*>(tk_elem->get())->setMuonRef(muonref);
 	}
       }
@@ -128,8 +129,7 @@ importToBlock( const edm::Event& e,
     bool thisIsAPotentialMuon = false;
     if( muId != -1 ) {
       muonref= reco::MuonRef( muons, muId );
-      thisIsAPotentialMuon = ( (pfmu_->hasValidTrack(muonref,true)&&PFMuonAlgo::isLooseMuon(muonref)) || 
-			       (pfmu_->hasValidTrack(muonref,false)&&PFMuonAlgo::isMuon(muonref)));
+      thisIsAPotentialMuon = isPotentialMuon(muonref);
     }
     if(thisIsAPotentialMuon || goodPtResolution( pftrackref->trackRef() ) ) {
       trkElem = new reco::PFBlockElementTrack( pftrackref );
@@ -236,4 +236,10 @@ muAssocToTrack( const reco::TrackRef& trackref,
 				      m.track() == trackref    );
 			   });  
   return ( muon != muonh->cend() ? std::distance(muonh->cbegin(),muon) : -1 );
+}
+
+bool GeneralTracksImporter::
+isPotentialMuon(const reco::MuonRef& muonref) const {
+  return (pfmu_->hasValidTrack(muonref,true)&&PFMuonAlgo::isLooseMuon(muonref)) || 
+    (pfmu_->hasValidTrack(muonref,false)&&PFMuonAlgo::isMuon(muonref));
 }
