@@ -405,12 +405,24 @@ PFMuonAlgo::isIsolatedMuon( const reco::MuonRef& muonRef ){
   // If it's not a tracker muon, only take it if there are valid muon hits
 
   reco::TrackRef standAloneMu = muonRef->standAloneMuon();
-
   if ( !muonRef->isTrackerMuon() ) {
+    // removing standalone muons with no muon hit
     if(standAloneMu->hitPattern().numberOfValidMuonDTHits() == 0 &&
        standAloneMu->hitPattern().numberOfValidMuonCSCHits() == 0) return false;
+
+    // removing fake global muons producing high fake MET.
+    // a good inner track together with hits in DT/CSC leads to a bad combined track. 
+    // the tune P algorithm then selects a track that does not have muon hits
+    if( muonRef->pt()>200 && muonRef->isGlobalMuon() ) {
+      reco::TrackRef tunePTrack = muonRef->tunePMuonBestTrack();
+      unsigned nMuonHitsOnTunePTrack = tunePTrack->hitPattern().numberOfValidMuonDTHits() + 
+	tunePTrack->hitPattern().numberOfValidMuonCSCHits();
+      if(nMuonHitsOnTunePTrack==0) return false;
+    }
   }
-  
+
+
+
   // for isolation, take the smallest pt available to reject fakes
   reco::TrackRef combinedMu = muonRef->combinedMuon();
   double smallestMuPt = combinedMu->pt();
@@ -697,7 +709,9 @@ std::vector<reco::Muon::MuonTrackTypePair> PFMuonAlgo::muonTracks(const reco::Mu
 
 
 
-bool PFMuonAlgo::reconstructMuon(reco::PFCandidate& candidate, const reco::MuonRef& muon, bool allowLoose) {
+bool PFMuonAlgo::reconstructMuon(reco::PFCandidate& candidate, 
+				 const reco::MuonRef& muon, 
+				 bool allowLoose) {
     using namespace std;
     using namespace reco;
 
