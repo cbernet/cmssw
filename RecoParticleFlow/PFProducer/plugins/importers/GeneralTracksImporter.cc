@@ -240,6 +240,10 @@ muAssocToTrack( const reco::TrackRef& trackref,
 
 bool GeneralTracksImporter::
 isPotentialMuon(const reco::MuonRef& muonref) const {
-  return (_pfmu.hasValidTrack(muonref,true) && PFMuonAlgo::isLooseMuon(muonref)) || 
-    (_pfmu.hasValidTrack(muonref,false)&&PFMuonAlgo::isMuon(muonref));
+  bool isLooseMuon = _pfmu.hasValidTrack(muonref,true) 
+    && PFMuonAlgo::isLooseMuon(muonref);
+  bool isMuon = _pfmu.hasValidTrack(muonref,false) 
+    && PFMuonAlgo::isMuon(muonref);
+
+  return isLooseMuon || isMuon; 
 }
