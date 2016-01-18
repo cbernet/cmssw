@@ -67,10 +67,7 @@ class PFMuonAlgo {
 
 
   ////POST CLEANING AND MOMEMNTUM ASSIGNMENT
-  bool hasValidTrack(const reco::MuonRef& muonRef,bool loose =false);
-
-
-
+  bool hasValidTrack(const reco::MuonRef& muonRef,bool loose =false) const;
 
   //Make a PF Muon : Basic method
   bool reconstructMuon(reco::PFCandidate&, const reco::MuonRef&,bool allowLoose = false);
@@ -111,10 +108,10 @@ class PFMuonAlgo {
   //Gives the track with the smallest Dpt/Pt
   MuonTrackTypePair getTrackWithSmallestError(const std::vector<MuonTrackTypePair>&);
 
-  std::vector<reco::Muon::MuonTrackTypePair> muonTracks(const reco::MuonRef& muon,bool includeSA = false,double dpt = 1e+9);
+  std::vector<reco::Muon::MuonTrackTypePair> muonTracks(const reco::MuonRef& muon,bool includeSA = false,double dpt = 1e+9) const;
 
   //Gets the good tracks
-  std::vector<reco::Muon::MuonTrackTypePair> goodMuonTracks(const reco::MuonRef& muon,bool includeSA = false);
+  std::vector<reco::Muon::MuonTrackTypePair> goodMuonTracks(const reco::MuonRef& muon,bool includeSA = false) const;
 
 
   //Estimate MET and SUmET for post cleaning

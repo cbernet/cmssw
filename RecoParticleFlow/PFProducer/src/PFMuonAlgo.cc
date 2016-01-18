@@ -500,7 +500,7 @@ PFMuonAlgo::isTightMuonPOG(const reco::MuonRef& muonRef) {
 
 
 bool 
-PFMuonAlgo::hasValidTrack(const reco::MuonRef& muonRef,bool loose) {
+PFMuonAlgo::hasValidTrack(const reco::MuonRef& muonRef,bool loose) const {
   if(loose)
     return muonTracks(muonRef).size()>0;
   else
@@ -680,12 +680,12 @@ PFMuonAlgo::printMuonProperties(const reco::MuonRef& muonRef){
 }
 
 
-std::vector<reco::Muon::MuonTrackTypePair> PFMuonAlgo::goodMuonTracks(const reco::MuonRef& muon,bool includeSA) {
+std::vector<reco::Muon::MuonTrackTypePair> PFMuonAlgo::goodMuonTracks(const reco::MuonRef& muon,bool includeSA) const {
   return muonTracks(muon,includeSA,maxDPtOPt_);
 }
 
 
-std::vector<reco::Muon::MuonTrackTypePair> PFMuonAlgo::muonTracks(const reco::MuonRef& muon,bool includeSA,double dpt) {
+std::vector<reco::Muon::MuonTrackTypePair> PFMuonAlgo::muonTracks(const reco::MuonRef& muon,bool includeSA,double dpt) const {
 
   std::vector<reco::Muon::MuonTrackTypePair> out;
   
