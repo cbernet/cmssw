@@ -685,32 +685,32 @@ std::vector<reco::Muon::MuonTrackTypePair> PFMuonAlgo::goodMuonTracks(const reco
 }
 
 
-std::vector<reco::Muon::MuonTrackTypePair> PFMuonAlgo::muonTracks(const reco::MuonRef& muon,bool includeSA,double dpt) const {
+std::vector<reco::Muon::MuonTrackTypePair> PFMuonAlgo::muonTracks(const reco::MuonRef& muon,bool includeSA,double dptOverPt) const {
 
   std::vector<reco::Muon::MuonTrackTypePair> out;
   
   if(muon->globalTrack().isNonnull() && muon->globalTrack()->pt()>0) 
-    if(muon->globalTrack()->ptError()/muon->globalTrack()->pt()<dpt)
+    if(muon->globalTrack()->ptError()/muon->globalTrack()->pt()<dptOverPt)
       out.push_back(std::make_pair(muon->globalTrack(),reco::Muon::CombinedTrack));
 
   if(muon->innerTrack().isNonnull() && muon->innerTrack()->pt()>0) 
-    if(muon->innerTrack()->ptError()/muon->innerTrack()->pt()<dpt)//Here Loose!@
+    if(muon->innerTrack()->ptError()/muon->innerTrack()->pt()<dptOverPt)//Here Loose!@
       out.push_back(std::make_pair(muon->innerTrack(),reco::Muon::InnerTrack));
 
   bool pickyExists=false; 
-  double pickyDpt=99999.; 
+  double pickyDptOverPt=99999.; 
   if(muon->pickyTrack().isNonnull() && muon->pickyTrack()->pt()>0) {
-    pickyDpt = muon->pickyTrack()->ptError()/muon->pickyTrack()->pt(); 
-    if(pickyDpt<dpt) 
+    pickyDptOverPt = muon->pickyTrack()->ptError()/muon->pickyTrack()->pt(); 
+    if(pickyDptOverPt<dptOverPt) 
       out.push_back(std::make_pair(muon->pickyTrack(),reco::Muon::Picky));
     pickyExists=true;
   }
 
   bool dytExists=false; 
-  double dytDpt=99999.; 
+  double dytDptOverPt=99999.; 
   if(muon->dytTrack().isNonnull() && muon->dytTrack()->pt()>0) {
-    dytDpt = muon->dytTrack()->ptError()/muon->dytTrack()->pt(); 
-    if(dytDpt<dpt) 
+    dytDptOverPt = muon->dytTrack()->ptError()/muon->dytTrack()->pt(); 
+    if(dytDptOverPt<dptOverPt) 
       out.push_back(std::make_pair(muon->dytTrack(),reco::Muon::DYT));
     dytExists=true;
   }
@@ -720,15 +720,15 @@ std::vector<reco::Muon::MuonTrackTypePair> PFMuonAlgo::muonTracks(const reco::Mu
   //So allow TPFMS if there is no picky or the error of tpfms is better than picky
   //AND if there is no DYT or the error of tpfms is better than DYT
   if(muon->tpfmsTrack().isNonnull() && muon->tpfmsTrack()->pt()>0) { 
-    double tpfmsDpt = muon->tpfmsTrack()->ptError()/muon->tpfmsTrack()->pt(); 
-    if( ( (pickyExists && tpfmsDpt<pickyDpt) || (!pickyExists) ) && 
-	( (dytExists   && tpfmsDpt<dytDpt)   || (!dytExists)   ) && 
-	tpfmsDpt<dpt )
+    double tpfmsDptOverPt = muon->tpfmsTrack()->ptError()/muon->tpfmsTrack()->pt(); 
+    if( ( (pickyExists && tpfmsDptOverPt<pickyDptOverPt) || (!pickyExists) ) && 
+	( (dytExists   && tpfmsDptOverPt<dytDptOverPt)   || (!dytExists)   ) && 
+	tpfmsDptOverPt<dptOverPt )
       out.push_back(std::make_pair(muon->tpfmsTrack(),reco::Muon::TPFMS));
   }
 
   if(includeSA && muon->outerTrack().isNonnull())
-    if(muon->outerTrack()->ptError()/muon->outerTrack()->pt()<dpt)
+    if(muon->outerTrack()->ptError()/muon->outerTrack()->pt()<dptOverPt)
       out.push_back(std::make_pair(muon->outerTrack(),reco::Muon::OuterTrack));
 
   return out;
