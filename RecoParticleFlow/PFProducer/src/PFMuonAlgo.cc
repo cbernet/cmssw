@@ -584,7 +584,6 @@ PFMuonAlgo::printMuonProperties(const reco::MuonRef& muonRef){
 
   if ( isTR ){
     reco::TrackRef trackerMu = muonRef->innerTrack();
-    const reco::Track& track = *trackerMu;
     std::cout<<"\tInner "<<trackInfo(trackerMu)<<std::endl;
     std::cout<< "\t\tTMLastStationAngLoose               "
 	<< muon::isGoodMuon(*muonRef,muon::TMLastStationAngLoose) << std::endl       
