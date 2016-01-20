@@ -10,7 +10,6 @@ qcd = cfg.MCComponent(
         user='CMS', cache=True)
 ) 
 
-
 qcd_reco = cfg.MCComponent(
     'qcd_reco',
     files = []
@@ -32,6 +31,14 @@ qcd_small_8dec = cfg.MCComponent(
     files = glob.glob('QCD_small_bcd7015/Job_*/*.root')
     )
 
+qcd_metcor_full = cfg.MCComponent(
+    'qcd',
+    files = getFiles(
+        "/QCD_Pt-15to7000_TuneCUETP8M1_Flat_13TeV_pythia8/RunIISpring15DR74-AsymptNoPURawReco_MCRUN2_74_V9A-v4/GEN-SIM-RECO/MetCorr",
+        user='cbern', cache=True)
+)
+
+
 ttbar_aod = cfg.MCComponent(
     'ttbar',
     files = getFiles(
@@ -39,11 +46,17 @@ ttbar_aod = cfg.MCComponent(
         user='CMS', cache=True)
 ) 
 
+ttbar_metcor_full = cfg.MCComponent(
+    'ttbar',
+    files = getFiles(
+        "/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-AsymptNoPU_MCRUN2_74_V9A-v2/AODSIM/MetCorr",
+        user='cbern', cache=True)
+)
 
 if __name__ == '__main__':
 
     import pprint 
-    sample = qcd_reco
+    sample = ttbar_metcor_full
     pprint.pprint(sample.files)
     print len(sample.files
 )

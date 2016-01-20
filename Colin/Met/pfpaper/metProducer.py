@@ -76,7 +76,7 @@ process.source = cms.Source(
 #      fileNames = cms.untracked.vstring("root://eoscms//eos/cms/store/relval/CMSSW_7_4_1/RelValTTbar_13/GEN-SIM-RECO/PU25ns_MCRUN2_74_V9_gensim71X-v1/00000/ACC93B1D-9AEC-E411-919D-0025905A60B8.root")
 #    fileNames = cms.untracked.vstring("file:ACC93B1D-9AEC-E411-919D-0025905A60B8.root")
 #    fileNames = cms.untracked.vstring('/store/relval/CMSSW_7_4_0/RelValProdTTbar/AODSIM/MCRUN1_74_V4-v1/00000/3C61F496-DEDA-E411-A468-0025905A6134.root')
-    fileNames = cms.untracked.vstring(qcd_reco.files)
+    fileNames = cms.untracked.vstring(ttbar_aod.files)
     )
 # process.source.fileNames = process.source.fileNames[:10]
 
