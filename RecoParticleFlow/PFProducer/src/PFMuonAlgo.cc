@@ -417,7 +417,11 @@ PFMuonAlgo::isIsolatedMuon( const reco::MuonRef& muonRef ){
       reco::TrackRef tunePTrack = muonRef->tunePMuonBestTrack();
       unsigned nMuonHitsOnTunePTrack = tunePTrack->hitPattern().numberOfValidMuonDTHits() + 
 	tunePTrack->hitPattern().numberOfValidMuonCSCHits();
-      if(nMuonHitsOnTunePTrack==0) return false;
+      if(nMuonHitsOnTunePTrack==0) {
+	std::cout<<"removing muon"<<std::endl;
+	printMuonProperties(muonRef);
+	return false;
+      }
     }
   }
 
