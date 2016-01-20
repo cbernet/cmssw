@@ -1,23 +1,23 @@
 import os
 import PhysicsTools.HeppyCore.framework.config as cfg
 
-debug = True
+debug = False
 
-from Colin.Met.samples.pfpaper_nopu import qcd_small_8dec as qcd
+from Colin.Met.samples.pfpaper_nopu import qcd_metcor_full, ttbar_metcor_full
 
-selectedComponents  = [qcd]
+selectedComponents  = [ttbar_metcor_full]
 
 if debug:
     print 'DEBUG MODE !!!'
     selectedComponents = selectedComponents[:1]
     comp = selectedComponents[0]
     comp.files = comp.files[:1]
-    comp.files = ['corrMET.root']
+    # comp.files = ['corrMET.root']
     print comp.files
     comp.splitFactor = 1
 else:
     for comp in selectedComponents: 
-        comp.splitFactor = len(comp.files)
+        comp.splitFactor = len(comp.files)/2
 
 from PhysicsTools.Heppy.analyzers.core.JSONAnalyzer import JSONAnalyzer
 json = cfg.Analyzer(
