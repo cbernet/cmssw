@@ -1,0 +1,2 @@
+cmsDriver.py step3  --datatier RECO --conditions auto:run2_data -s RAW2DIGI,L1Reco,RECO,EI --eventcontent RECO --no_exec -n 100  --filein file:step2.root  --fileout file:step3.root --data
+RAW2DIGI,L1Reco,RECO,EI,ENDJOB
