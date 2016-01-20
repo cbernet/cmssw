@@ -31,10 +31,10 @@ process.source = cms.Source("PoolSource",
 #    fileNames = cms.untracked.vstring('file:step2.root'),
     fileNames = cms.untracked.vstring(
         #Myriam
-        # 'file:/afs/cern.ch/user/m/mschoene/public/pickevents_misRecodMuonRAW.root',
+        'file:/afs/cern.ch/user/m/mschoene/public/pickevents_misRecodMuonRAW.root',
         # 'file:/afs/cern.ch/user/m/mschoene/public/pickevents_misRecodMuonRAW2.root',
         #Pawandeep & Owen
-        'file:/afs/cern.ch/user/p/pjandir/public/ForEventDisplays/data-bad-events/out-raw-htmht-2015D-1.root'
+        # 'file:/afs/cern.ch/user/p/pjandir/public/ForEventDisplays/data-bad-events/out-raw-htmht-2015D-1.root'
         ),
     secondaryFileNames = cms.untracked.vstring()
 )
