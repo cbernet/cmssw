@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: step3 --datatier RECO --conditions auto:run2_data -s RAW2DIGI,L1Reco,RECO,EI --eventcontent RECO --no_exec -n 100 --filein file:step2.root --fileout file:step3.root --data
+# with command line options: step3 --datatier RECO --conditions auto:run2_data -s RAW2DIGI,L1Reco,RECO,EI --eventcontent RECO --no_exec -n 100 --filein file:/afs/cern.ch/user/m/mschoene/public/pickevents_misRecodMuonRAW.root --fileout file:step3.root --data
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('RECO')
@@ -19,7 +19,7 @@ process.load('Configuration.StandardSequences.L1Reco_cff')
 process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
 process.load('CommonTools.ParticleFlow.EITopPAG_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
-process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(100)
@@ -58,7 +58,7 @@ process.RECOoutput = cms.OutputModule("PoolOutputModule",
 # Additional output definition
 
 # Other statements
-from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data', '')
 
 # Path and EndPath definitions
