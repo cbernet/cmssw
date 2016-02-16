@@ -3,11 +3,13 @@ from DataFormats.FWLite import Events as FWLiteEvents
 from ROOT import gROOT, gSystem, AutoLibraryLoader
 
 print "Loading FW Lite"
-gSystem.Load("libFWCoreFWLite");
-gROOT.ProcessLine('FWLiteEnabler::enable();')
+# gSystem.Load("libFWCoreFWLite");
+# gROOT.ProcessLine('FWLiteEnabler::enable();')
+# gSystem.Load("libFWCoreFWLite");
 
-gSystem.Load("libFWCoreFWLite");
-gSystem.Load("libDataFormatsPatCandidates");
+AutoLibraryLoader.enable();
+gSystem.Load("libDataFormatsFWLite");
+# gSystem.Load("libDataFormatsPatCandidates");
 
 from ROOT import gInterpreter
 gInterpreter.ProcessLine("using namespace reco;")
