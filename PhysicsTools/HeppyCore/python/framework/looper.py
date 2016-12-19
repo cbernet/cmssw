@@ -117,6 +117,9 @@ class Looper(object):
                                                       self.outDir,
                                                       firstEvent,
                                                       nEvents)
+              #in case the preprocessor was run, need to process all events afterwards 
+              self.firstEvent = 0
+              self.nEvents = None
         if hasattr(self.cfg_comp,"options"):
               print self.cfg_comp.files,self.cfg_comp.options
               self.events = config.events_class(self.cfg_comp.files,
